@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-3 border">
-
+      <div class="col-3" style="margin-top: 15px">
+        <Search/>
       </div>
       <div class="col-9">
         <div class="row border auction" v-for="auction in auctions">
@@ -10,7 +10,9 @@
           <div class="col-7 offset-md-2">
             <ul class="list-group">
               <li class="auction text-primary"><h5>{{auction.title}}</h5></li>
-              <li class="auction text-muted"><small>{{auction.categoryTitle}}</small></li>
+              <li class="auction text-muted">
+                <small>{{auction.categoryTitle}}</small>
+              </li>
               <li class="auction">NZD{{auction.reservePrice}}</li>
             </ul>
           </div>
@@ -21,8 +23,13 @@
 </template>
 
 <script>
+  import Search from './Search'
+
   export default {
     name: "AuctionList",
+    components: {
+      Search
+    },
     data() {
       return {
         auctions: [
@@ -202,12 +209,13 @@
     height: 200px;
     margin: 10px;
   }
+
   .border {
     border-radius: 15px;
     border: solid #e7e7e7 1px;
   }
 
-  .auction{
+  .auction {
     margin-top: 15px;
     margin-bottom: 15px;
   }
