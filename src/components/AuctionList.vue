@@ -9,7 +9,7 @@
           <div class="col-3"><img src="../assets/test.jpg" alt=""/></div>
           <div class="col-7 offset-md-2">
             <ul class="list-group">
-              <li class="auction text-primary"><h5>{{auction.title}}</h5></li>
+              <li class="auction text-primary"><router-link :to="{name:'AuctionDetails',params:{id:auction.id}}"><h5>{{auction.title}}</h5></router-link></li>
               <li class="auction text-muted">
                 <small>{{auction.categoryTitle}}</small>
               </li>

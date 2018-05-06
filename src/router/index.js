@@ -4,6 +4,7 @@ import AuctionModify from '@/components/AuctionModify'
 import AuctionList from '@/components/AuctionList'
 import AuctionPhoto from '@/components/AuctionPhoto'
 import UserInfo from '@/components/UserInfo'
+import AuctionDetails from '@/components/AuctionDetails'
 
 
 Vue.use(Router);
@@ -30,6 +31,11 @@ export default new Router({
       path: '/auction/photo',
       name: 'AuctionPhoto',
       component: AuctionPhoto
+    },
+    {
+      path: '/auction/details/:id',
+      name: 'AuctionDetails',
+      component: AuctionDetails
     }
   ]
 })
