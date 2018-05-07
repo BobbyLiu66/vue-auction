@@ -27,7 +27,7 @@
     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Modify">
       Change your information
     </button>
-    <ModifyUser></ModifyUser>
+    <ModifyUser :modify="userInfo"></ModifyUser>
   </div>
 </template>
 
@@ -42,11 +42,11 @@
         userInfo: {},
       }
     },
-    methods: {
-      modify: function () {
-        this.modifyInfo = this.userInfo
-      }
-    },
+    // methods: {
+    //   modify: function () {
+    //     this.modifyInfo = this.userInfo
+    //   }
+    // },
     beforeCreate() {
       axios({
         method: 'get',

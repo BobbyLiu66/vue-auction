@@ -5,6 +5,7 @@ import AuctionList from '@/components/AuctionList'
 import AuctionPhoto from '@/components/AuctionPhoto'
 import UserInfo from '@/components/UserInfo'
 import AuctionDetails from '@/components/AuctionDetails'
+import Home from '@/components/Home'
 
 
 Vue.use(Router);
@@ -15,7 +16,8 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: AuctionList
+      component: Home
+      //TODO change
     },
     {
       path: '/auction/modify',

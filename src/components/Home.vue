@@ -1,23 +1,22 @@
 <template>
-  <div id="app">
-    <Navbar/>
-    <router-view/>
+  <div>
+    <AuctionList/>
   </div>
 </template>
 
 <script>
   import Navbar from '@/components/Navbar'
+  import AuctionList from '@/components/AuctionList'
 
   export default {
-    name: 'App',
+    name: "Home",
     components: {
       Navbar,
+      AuctionList
     }
   }
 </script>
 
 <style scoped>
-  body {
-    background-color: cornsilk;
-  }
+
 </style>
