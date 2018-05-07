@@ -28,8 +28,7 @@
           </tr>
           <tr>
             <td>your bid amount:</td>
-            <td><input type="number" class="form-control form-control-sm" placeholder="Enter your bid amount."
-                       v-bind:max="result.reservePrice" v-bind:min="result.currentBid"/>
+            <td><input type="number" class="form-control form-control-sm" placeholder="Enter your bid amount."/>
             </td>
           </tr>
           <tr>
@@ -40,7 +39,7 @@
           <tr>
             <td colspan="2" class="text-center">
               <p class="text-muted">Seller Detail:
-                <router-link :to="userInfo">{{result.seller}}</router-link>
+                <router-link :to="{name:'UserInfo',params:{id:result.seller.id}}">{{result.seller.username}}</router-link>
               </p>
             </td>
           </tr>
@@ -60,7 +59,7 @@
           <tr>
             <td>NZD{{bids.amount}}</td>
             <td>
-              <router-link :to="{name:'UserInfo',params:'userId:bids.buyerId'}"><p class="text-truncate">{{bids.buyerUsername}}</p></router-link>
+              <router-link :to="{name:'UserInfo',params:{id:bids.buyerId}}"><p class="text-truncate">{{bids.buyerUsername}}</p></router-link>
             </td>
             <td>{{hourMinutes(bids.datetime)}}</td>
           </tr>
@@ -83,7 +82,7 @@
     data() {
       return {
         bidHistoryStatus: true,
-        result: {},
+        result: {seller:{}},
         previousDate: ''
       }
     },
