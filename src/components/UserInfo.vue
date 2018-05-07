@@ -27,7 +27,7 @@
     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Modify">
       Change your information
     </button>
-    <!--<ModifyUser ></ModifyUser>-->
+    <ModifyUser></ModifyUser>
   </div>
 </template>
 
@@ -37,18 +37,22 @@
 
   export default {
     name: "UserInfo",
-    data(){
-      return{
-        userInfo:{}
+    data() {
+      return {
+        userInfo: {},
       }
     },
-    created(){
-      console.log(this.$route.params);
+    methods: {
+      modify: function () {
+        this.modifyInfo = this.userInfo
+      }
+    },
+    beforeCreate() {
       axios({
         method: 'get',
         url: `${CONFIG.URL}/users/${this.$route.params.id}`,
-        headers:{
-          'X-Authorization':this.$route.params.token
+        headers: {
+          'X-Authorization': this.$route.params.token
         }
       }).then((response) => {
         this.userInfo = response.data
@@ -63,7 +67,7 @@
 </script>
 
 <style scoped>
-.user-info{
-  max-width: 50%;
-}
+  .user-info {
+    max-width: 50%;
+  }
 </style>

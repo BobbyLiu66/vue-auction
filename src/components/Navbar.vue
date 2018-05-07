@@ -74,7 +74,6 @@
           });
       },
       userInfo: function (response) {
-        console.log(response);
         this.username = response.username;
         this.token = response.token;
         this.id = response.id

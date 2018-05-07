@@ -29,7 +29,7 @@
           <tr>
             <td>your bid amount:</td>
             <td><input type="number" class="form-control form-control-sm" placeholder="Enter your bid amount."
-                       v-bind:max="result.reservePrice" v-bind:min="result.currentBid" v-model="result.currentBid"/>
+                       v-bind:max="result.reservePrice" v-bind:min="result.currentBid"/>
             </td>
           </tr>
           <tr>
@@ -40,7 +40,7 @@
           <tr>
             <td colspan="2" class="text-center">
               <p class="text-muted">Seller Detail:
-                <router-link to="/user/details">{{result.seller.username}}</router-link>
+                <router-link :to="userInfo">{{result.seller}}</router-link>
               </p>
             </td>
           </tr>
@@ -76,42 +76,31 @@
 </template>
 
 <script>
+  import CONFIG from '../CONFIG'
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   export default {
     name: "AuctionDetails",
     data() {
       return {
         bidHistoryStatus: true,
-        result: {
-          "categoryId": 1,
-          "categoryTitle": "apparel",
-          "title": "Super cape",
-          "reservePrice": 10,
-          "startDateTime": 1518606000000,
-          "endDateTime": 1520938800000,
-          "description": "One slightly used cape",
-          "creationDateTime": 1518519600000,
-          "startingBid": 0.01,
-          "currentBid": 10,
-          "bids": [
-            {
-              "buyerId": 1,
-              "datetime": "2018-02-19T11:01:00.000Z",
-              "amount": 10,
-              "buyerUsername": "black.panther"
-            }
-          ],
-          "seller": {
-            "id": 2,
-            "username": "superman"
-          }
-        },
+        result: {},
         previousDate: ''
       }
+    },
+    created(){
+      axios({
+        method: 'get',
+        url: `${CONFIG.URL}/auctions/${this.$route.params.id}`,
+      }).then((response) => {
+        this.result = response.data
+      }).catch((err) => {
+        this.errorMessage = err
+      });
     },
     methods: {
       bid: function () {
       },
+      //TODO
       checkDate: function (dateTime) {
         const time = new Date(dateTime);
         const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
@@ -124,7 +113,6 @@
         const hours = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
         return `${hours}:${minutes}`
       },
-      //TODO change number to words
       monthDate: function (dateTime) {
         const time = new Date(dateTime);
         const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();

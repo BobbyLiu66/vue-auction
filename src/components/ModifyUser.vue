@@ -14,32 +14,32 @@
               <span>{{errorMessage}}</span>
             </div>
             <div class="form-group">
-              <label for="signInUsername" class="col-form-label">Username:</label>
-              <input type="text" class="form-control" id="signInUsername" placeholder="Enter username"
+              <label for="username" class="col-form-label">Username:</label>
+              <input type="text" class="form-control" id="username" placeholder="Enter username"
                      v-model="username"
                      required>
             </div>
             <div class="form-group">
-              <label for="inputGivenName">Given name:</label>
-              <input type="text" class="form-control" id="inputGivenName" placeholder="Enter given name"
+              <label for="givenName">Given name:</label>
+              <input type="text" class="form-control" id="givenName" placeholder="Enter given name"
                      v-model="givenName"
                      required>
             </div>
             <div class="form-group">
-              <label for="inputFamilyName">Family name:</label>
-              <input type="text" class="form-control" id="inputFamilyName" placeholder="Enter family name"
+              <label for="familyName">Family name:</label>
+              <input type="text" class="form-control" id="familyName" placeholder="Enter family name"
                      v-model="familyName"
                      required>
             </div>
             <div class="form-group">
-              <label for="signInEmailAddress" class="col-form-label">Email address:</label>
-              <input type="email" class="form-control" id="signInEmailAddress" placeholder="Enter email address"
+              <label for="email" class="col-form-label">Email address:</label>
+              <input type="email" class="form-control" id="email" placeholder="Enter email address"
                      v-model="email"
                      required>
             </div>
             <div class="form-group">
-              <label for="singInPassword" class="col-form-label">Password:</label>
-              <input type="password" class="form-control" id="singInPassword" placeholder="Enter password"
+              <label for="password" class="col-form-label">Password:</label>
+              <input type="password" class="form-control" id="password" placeholder="Enter password"
                      v-model="password"
                      required>
             </div>
@@ -55,22 +55,22 @@
 </template>
 
 <script>
+  //TODO some bugs
   import CONFIG from '../CONFIG'
-
   export default {
     data() {
       return {
         results: '',
-        username: this.$router.params.username,
-        givenName: this.$router.params.givenName,
-        familyName: this.$router.params.familyName,
-        email: this.$router.params.email,
-        password: this.$router.params.password,
+        username: '',
+        givenName: '',
+        familyName: '',
+        email: '',
+        password:'',
         errorMessage: ''
       }
     },
     methods: {
-      signIn: function (event) {
+      change: function (event) {
         axios({
           method: 'patch',
           url: `${CONFIG.URL}/users/login`,
