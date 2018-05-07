@@ -27,7 +27,7 @@
     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Modify">
       Change your information
     </button>
-    <ModifyUser :modify="userInfo"></ModifyUser>
+    <ModifyUser :modify="userInfo" v-on="updateUserInfo"></ModifyUser>
   </div>
 </template>
 
@@ -42,11 +42,11 @@
         userInfo: {},
       }
     },
-    // methods: {
-    //   modify: function () {
-    //     this.modifyInfo = this.userInfo
-    //   }
-    // },
+    computed:{
+      updateUserInfo:function (response) {
+        this.userInfo = response
+      }
+    },
     beforeCreate() {
       axios({
         method: 'get',
@@ -55,6 +55,8 @@
           'X-Authorization': this.$route.params.token
         }
       }).then((response) => {
+        response.data.id = this.$route.params.id;
+        response.data.token = this.$route.params.token;
         this.userInfo = response.data
       }).catch((err) => {
         this.errorMessage = err

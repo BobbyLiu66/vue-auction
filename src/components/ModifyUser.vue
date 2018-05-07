@@ -10,8 +10,8 @@
         </div>
         <div class="modal-body text-center">
           <form>
-            <div v-if="errorMessage" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-              <span>{{errorMessage}}</span>
+            <div v-if="message" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+              <span>{{message}}</span>
             </div>
             <div class="form-group">
               <label for="username" class="col-form-label">Username:</label>
@@ -67,31 +67,32 @@
     data() {
       return {
         results: '',
-        username: '',
-        givenName: '',
-        familyName: '',
-        email: '',
         password:'',
-        errorMessage: ''
+        message: ''
       }
     },
     methods: {
-      change: function (event) {
+      change: function () {
         axios({
           method: 'patch',
-          url: `${CONFIG.URL}/users/login`,
+          url: `${CONFIG.URL}/users/${this.modifyInfo.id}`,
+          headers: {
+            'X-Authorization': this.modifyInfo.token
+          },
           data: {
-            username: this.username,
-            givenName: this.givenName,
-            familyName: this.familyName,
-            email: this.email,
+            username: this.modifyInfo.username,
+            givenName: this.modifyInfo.givenName,
+            familyName: this.modifyInfo.familyName,
+            email: this.modifyInfo.email,
             password: this.password,
           }
-        }).then((response) => {
-          this.results = response;
+        }).then(() => {
+          this.$emit('modifyMethod', this.modifyInfo);
+          this.message = "change information success";
+          setInterval(function (){$('#Modify').modal('hide')},1000)
         })
           .catch((err) => {
-            this.errorMessage = err
+            this.message = err
           });
       }
     },
@@ -100,10 +101,4 @@
 </script>
 
 <style scoped>
-  .login-page {
-    width: 100%;
-    max-width: 40%;
-    padding: 15px;
-    margin: 0 auto;
-  }
 </style>
