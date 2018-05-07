@@ -4,34 +4,58 @@
       <tbody>
       <tr>
         <th scope="row">username:</th>
-        <td>Mark</td>
+        <td>{{this.userInfo.username}}</td>
       </tr>
       <tr>
         <th scope="row">family name:</th>
-        <td>Jacob</td>
+        <td>{{this.userInfo.familyName}}</td>
       </tr>
       <tr>
         <th scope="row">given name:</th>
-        <td>Larry</td>
+        <td>{{this.userInfo.givenName}}</td>
       </tr>
       <tr>
         <th scope="row">email address:</th>
-        <td>Larry</td>
+        <td>{{this.userInfo.email}}</td>
+      </tr>
+      <tr>
+        <th scope="row">account balance:</th>
+        <td>NZD{{this.userInfo.accountBalance}}</td>
       </tr>
       </tbody>
     </table>
     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Modify">
       Change your information
     </button>
-    <ModifyUser></ModifyUser>
+    <!--<ModifyUser ></ModifyUser>-->
   </div>
 </template>
 
 <script>
   import ModifyUser from './ModifyUser'
+  import CONFIG from '../CONFIG'
 
   export default {
     name: "UserInfo",
+    data(){
+      return{
+        userInfo:{}
+      }
+    },
+    created(){
+      console.log(this.$route.params);
+      axios({
+        method: 'get',
+        url: `${CONFIG.URL}/users/${this.$route.params.id}`,
+        headers:{
+          'X-Authorization':this.$route.params.token
+        }
+      }).then((response) => {
+        this.userInfo = response.data
+      }).catch((err) => {
+        this.errorMessage = err
+      });
+    },
     components: {
       ModifyUser
     }

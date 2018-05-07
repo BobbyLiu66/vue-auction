@@ -1,36 +1,39 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-      <router-link class="navbar-brand" to="/">Home</router-link>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              USERNAME
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <router-link class="dropdown-item" to="/user/info">Profile</router-link>
-              <router-link class="dropdown-item" to="/auction">My Auction Bid</router-link>
-              <router-link class="dropdown-item" to="/auction">My Auction Items</router-link>
-              <button class="dropdown-item" @click="logout">Log Out</button>
-            </div>
-          </li>
-        </ul>
-        <form class="form-inline mt-2 mt-md-0">
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <router-link class="navbar-brand" to="/">Home</router-link>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse mt-2 mt-md-0">
+      <ul class="navbar-nav mr-auto" v-if="this.username">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false">
+            Hi {{this.username}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <router-link class="dropdown-item" :to="{name:'UserInfo',params:{id:this.id,token:this.token}}">Profile</router-link>
+            <router-link class="dropdown-item" to="/auction">My Auction Bid</router-link>
+            <router-link class="dropdown-item" to="/auction">My Auction Items</router-link>
+            <button class="dropdown-item" @click="logout">Log Out</button>
+          </div>
+        </li>
+      </ul>
+      <form class="form-inline mt-2 mt-md-0" v-if="!this.username">
         <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Login">
-        Login
+          Login
         </button>
-        <Login/>
+        <Login v-on:loginMethod="userInfo"/>
 
         <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#SignIn">
-        Sign In
+          Sign In
         </button>
-        <SignIn/>
-        </form>
-      </div>
-    </nav>
+        <SignIn v-on:signIn="userInfo"/>
+      </form>
+    </div>
+  </nav>
 
 
 </template>
@@ -42,12 +45,19 @@
 
   export default {
     name: "Navbar",
+    data() {
+      return {
+        username: '',
+        token: '',
+        id:''
+      }
+    },
     components: {
       Login,
       SignIn
     },
-    methods:{
-      logout:function () {
+    methods: {
+      logout: function () {
         axios({
           method: 'post',
           url: `${CONFIG.URL}/users/logout`,
@@ -62,6 +72,12 @@
           .catch((err) => {
             this.errorMessage = err
           });
+      },
+      userInfo: function (response) {
+        console.log(response);
+        this.username = response.username;
+        this.token = response.token;
+        this.id = response.id
       }
     }
   }

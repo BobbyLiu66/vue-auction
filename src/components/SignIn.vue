@@ -8,42 +8,48 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body text-center">
-          <form>
-            <div v-if="errorMessage" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-              <span>{{errorMessage}}</span>
-            </div>
-            <div class="form-group">
-              <label for="signInUsername" class="col-form-label">Username:</label>
+        <div class="modal-body">
+
+          <div v-if="errorMessage" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            <span>{{errorMessage}}</span>
+          </div>
+
+
+            <label for="signInUsername" class="col-form-label">Username: </label>
+            <div class="input-group mb-3">
               <input type="text" class="form-control" id="signInUsername" placeholder="Enter username"
                      v-model="username"
                      required>
             </div>
-            <div class="form-group">
-              <label for="inputGivenName">Given name</label>
+
+            <label for="inputGivenName">Given name: </label>
+            <div class="input-group mb-3">
               <input type="text" class="form-control" id="inputGivenName" placeholder="Enter given name"
                      v-model="givenName"
                      required>
             </div>
-            <div class="form-group">
-              <label for="inputFamilyName">Family name</label>
+
+            <label for="inputFamilyName">Family name: </label>
+            <div class="input-group mb-3">
               <input type="text" class="form-control" id="inputFamilyName" placeholder="Enter family name"
                      v-model="familyName"
                      required>
             </div>
-            <div class="form-group">
-              <label for="signInEmailAddress" class="col-form-label">Email address:</label>
+
+            <label for="signInEmailAddress" class="col-form-label">Email address: </label>
+            <div class="input-group mb-3">
               <input type="email" class="form-control" id="signInEmailAddress" placeholder="Enter email address"
                      v-model="email"
                      required>
             </div>
-            <div class="form-group">
-              <label for="singInPassword" class="col-form-label">Password:</label>
+            <label for="singInPassword" class="col-form-label">Password: </label>
+            <div class="input-group mb-3">
+
               <input type="password" class="form-control" id="singInPassword" placeholder="Enter password"
                      v-model="password"
                      required>
             </div>
-          </form>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -58,6 +64,7 @@
   import CONFIG from '../CONFIG'
 
   export default {
+    props: ['sign'],
     data() {
       return {
         results: '',
@@ -71,7 +78,7 @@
     },
 
     methods: {
-      signIn: function (event) {
+      signIn: function () {
         axios({
           method: 'post',
           url: `${CONFIG.URL}/users`,
@@ -82,12 +89,19 @@
             email: this.email,
             password: this.password,
           }
-        }).then((response) => {
-          this.results = response;
-        })
-          .catch(() => {
-            this.errorMessage = "Email has been used !"
-          });
+        }).then(() => {
+          axios({
+            method: 'post',
+            url: `${CONFIG.URL}/users/login?username=${this.username}&password=${this.password}`,
+          }).then((response)=>{
+            this.$emit('signIn', {token:response.data.token, username:this.username,id:response.data.id});
+            $('#SignIn').modal('hide')
+          }).catch((err)=>{
+            this.errorMessage = err
+          })
+        }).catch((err) => {
+            this.errorMessage = err
+        });
       }
     },
     name: "SignIn"

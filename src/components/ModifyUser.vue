@@ -56,15 +56,16 @@
 
 <script>
   import CONFIG from '../CONFIG'
+
   export default {
     data() {
       return {
         results: '',
-        username: $route.params.username,
-        givenName: $route.params.givenName,
-        familyName: $route.params.familyName,
-        email: $route.params.email,
-        password: $route.params.password,
+        username: this.$router.params.username,
+        givenName: this.$router.params.givenName,
+        familyName: this.$router.params.familyName,
+        email: this.$router.params.email,
+        password: this.$router.params.password,
         errorMessage: ''
       }
     },

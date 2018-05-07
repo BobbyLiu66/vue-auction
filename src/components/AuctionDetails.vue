@@ -53,13 +53,14 @@
           </tr>
           </thead>
           <tbody v-for="bids in result.bids" v-bind:class="{'history':bidHistoryStatus}">
-          <tr>
-            <td colspan="3">{{}}</td>
+
+          <tr v-if="!checkDate(bids.datetime)">
+            <td colspan="3">{{monthDate(bids.datetime)}}</td>
           </tr>
           <tr>
             <td>NZD{{bids.amount}}</td>
             <td>
-              <router-link :to="{name:'UserDetails',params:'userId:bids.buyerId'}">{{bids.buyerUsername}}</router-link>
+              <router-link :to="{name:'UserInfo',params:'userId:bids.buyerId'}"><p class="text-truncate">{{bids.buyerUsername}}</p></router-link>
             </td>
             <td>{{hourMinutes(bids.datetime)}}</td>
           </tr>
@@ -75,6 +76,7 @@
 </template>
 
 <script>
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   export default {
     name: "AuctionDetails",
     data() {
@@ -104,11 +106,17 @@
             "username": "superman"
           }
         },
-        previousDate:''
+        previousDate: ''
       }
     },
     methods: {
       bid: function () {
+      },
+      checkDate: function (dateTime) {
+        const time = new Date(dateTime);
+        const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
+        const newDate = `${day} ${months[time.getMonth()]}`;
+        return newDate === this.previousDate
       },
       hourMinutes: function (dateTime) {
         const time = new Date(dateTime);
@@ -117,11 +125,11 @@
         return `${hours}:${minutes}`
       },
       //TODO change number to words
-      monthWeek:function(dateTime){
+      monthDate: function (dateTime) {
         const time = new Date(dateTime);
-        const month = time.getMonth() < 10 ? `0${time.getMonth()}` : time.getMonth();
-        const week = time.get() < 10 ? `0${time.getHours()}` : time.getHours();
-        // return `${hours}:${minutes}`
+        const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
+        this.previousDate = `${day} ${months[time.getMonth()]}`;
+        return this.previousDate
       },
       bidHistory: function () {
         this.bidHistoryStatus = !this.bidHistoryStatus
