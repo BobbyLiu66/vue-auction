@@ -10,10 +10,9 @@
         </div>
         <div class="modal-body">
 
-          <div v-if="errorMessage" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-            <span>{{errorMessage}}</span>
+          <div v-if="message" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            <span>{{message}}</span>
           </div>
-
 
             <label for="signInUsername" class="col-form-label">Username: </label>
             <div class="input-group mb-3">
@@ -73,7 +72,7 @@
         familyName: '',
         email: '',
         password: '',
-        errorMessage: ''
+        message: ''
       }
     },
 
@@ -97,10 +96,10 @@
             this.$emit('signIn', {token:response.data.token, username:this.username,id:response.data.id});
             $('#SignIn').modal('hide')
           }).catch((err)=>{
-            this.errorMessage = err
+            this.message = err
           })
         }).catch((err) => {
-            this.errorMessage = err
+            this.message = err
         });
       }
     },

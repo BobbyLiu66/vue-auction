@@ -52,7 +52,7 @@
         startIndex: '',
         count: '',
         q: '',
-        categoryId: '', //TODO
+        categoryId: '',
         seller: '',
         bidder: '',
         winner: '',
@@ -68,10 +68,9 @@
           },
         }).then((response) => {
           this.$emit('search', response.data);
-        })
-          .catch((err) => {
-            this.message = err
-          });
+        }).catch((err) => {
+          this.message = err
+        });
       }
     },
 

@@ -17,7 +17,7 @@ export default new Router({
       component: Home
     },
     {
-      path:'/user/auction',
+      path:'/user/auction/:type',
       name:'UserAuction',
       component:UserAuction
     },

@@ -42,7 +42,7 @@
         this.auctionDetail = result
       }
     },
-    created() {
+    beforeCreate() {
       axios({
         method: 'get',
         url: `${CONFIG.URL}/auctions`,

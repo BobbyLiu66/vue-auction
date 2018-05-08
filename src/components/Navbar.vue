@@ -16,8 +16,11 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <router-link class="dropdown-item" :to="{name:'UserInfo',params:{id:this.id,token:this.token}}">Profile
             </router-link>
-            <router-link class="dropdown-item" :to="{name:''}">My Bid</router-link>
-            <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,seller:true}}">My Auction
+            <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,bidder:true,type:'bidder'}}">My Bid Items</router-link>
+            <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,seller:true,type:'seller'}}">My Soled
+              Items
+            </router-link>
+            <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,winner:true,type:'winner'}}">My Wined
               Items
             </router-link>
             <button class="dropdown-item" @click="logout">Log Out</button>
