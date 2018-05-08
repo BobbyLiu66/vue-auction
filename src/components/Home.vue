@@ -2,11 +2,9 @@
   <div class="container">
     <div class="row">
       <div class="col-3" style="margin-top: 15px">
-        <Search />
+        <Search v-on:search="getSearch"/>
       </div>
-
         <AuctionList :auctionDetail="auctionDetail"/>
-
     </div>
   </div>
 </template>
@@ -24,14 +22,24 @@
       AuctionList,
       Search
     },
-    data() {
-      return{
-        auctionDetail:[]
+    data(){
+      return {
+        auctions:[]
       }
     },
     computed:{
-      getAuctions:function (response) {
-        this.auctionDetail = response
+      auctionDetail:{
+        get: function () {
+          return this.auctions
+        },
+        set: function (response) {
+          this.auctions = response
+        }
+      }
+    },
+    methods:{
+      getSearch:function (result) {
+        this.auctionDetail = result
       }
     },
     created(){

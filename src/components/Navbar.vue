@@ -14,7 +14,8 @@
             Hi {{this.username}}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <router-link class="dropdown-item" :to="{name:'UserInfo',params:{id:this.id,token:this.token}}">Profile</router-link>
+            <router-link class="dropdown-item" :to="{name:'UserInfo',params:{id:this.id,token:this.token}}">Profile
+            </router-link>
             <router-link class="dropdown-item" to="/auction">My Auction Bid</router-link>
             <router-link class="dropdown-item" to="/auction">My Auction Items</router-link>
             <button class="dropdown-item" @click="logout">Log Out</button>
@@ -45,11 +46,16 @@
 
   export default {
     name: "Navbar",
+    beforeMount(){
+      this.username = window.sessionStorage.username;
+      this.token = window.sessionStorage.token;
+      this.id = window.sessionStorage.id;
+    },
     data() {
       return {
         username: '',
         token: '',
-        id:''
+        id: ''
       }
     },
     components: {
@@ -74,9 +80,9 @@
           });
       },
       userInfo: function (response) {
-        this.username = response.username;
-        this.token = response.token;
-        this.id = response.id
+        this.username = window.sessionStorage.username = response.username;
+        this.token = window.sessionStorage.token = response.token;
+        this.id = window.sessionStorage.id = response.id
       }
     }
   }

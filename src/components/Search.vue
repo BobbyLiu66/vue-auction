@@ -2,7 +2,8 @@
   <form>
     <div class="form-group">
       <label for="startIndex" class="col-form-label">Start Index:</label>
-      <input type="number" class="form-control form-control-sm" id="startIndex" placeholder="Enter number of items to skip."
+      <input type="number" class="form-control form-control-sm" id="startIndex"
+             placeholder="Enter number of items to skip."
              v-model="startIndex">
     </div>
     <div class="form-group">
@@ -36,25 +37,44 @@
              v-model="winner">
     </div>
     <div class="form-group text-center">
-      <button type="button" class="btn btn-primary">Search</button>
+      <button type="button" class="btn btn-primary" @click="search">Search</button>
     </div>
   </form>
 </template>
 
 <script>
+  import CONFIG from '../CONFIG'
+
   export default {
     name: "Search",
     data() {
       return {
         startIndex: '',
-        count:'',
-        q:'',
+        count: '',
+        q: '',
         categoryId: '', //TODO
         seller: '',
         bidder: '',
         winner: '',
       }
-    }
+    },
+    methods: {
+      search: function () {
+        axios({
+          method: 'get',
+          url: `${CONFIG.URL}/auctions?startIndex=${this.startIndex}&count=${this.count}&q=${this.q}&category-id=${this.categoryId}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}`,
+          headers: {
+            'X-Authorization': window.sessionStorage.token
+          },
+        }).then((response) => {
+          this.$emit('search', response.data);
+        })
+          .catch((err) => {
+            this.message = err
+          });
+      }
+    },
+
   }
 
 </script>

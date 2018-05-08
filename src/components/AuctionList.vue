@@ -1,5 +1,5 @@
 <template>
-  <div class="col-9" v-if="auctions">
+  <div class="col-9" v-if="auctions.length > 0">
   <div class="row border auction" v-for="auction in auctions">
     <div class="col-3"><img src="../assets/test.jpg" alt=""/></div>
     <div class="col-7 offset-md-2">
