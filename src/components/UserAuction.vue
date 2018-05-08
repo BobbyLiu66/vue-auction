@@ -65,6 +65,21 @@
           }
           else {
             this.message = '';
+            const timeLine = new Date();
+            let closedFlag = true;
+            let processFlag = true;
+            //TODO test
+            response.data.forEach((data) => {
+              const dataTime = new Date(data.endDateTime);
+              if (dataTime < timeLine && closedFlag) {
+                data.additional = 'Closed';
+                closedFlag = false
+              }
+              else if(processFlag){
+                data.additional = 'In process';
+                processFlag = false
+              }
+            });
             this.auctionDetail = response.data
           }
         }).catch((err) => {
