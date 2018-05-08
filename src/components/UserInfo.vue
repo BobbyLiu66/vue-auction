@@ -47,7 +47,7 @@
         this.userInfo = response
       }
     },
-    beforeCreate() {
+    created() {
       axios({
         method: 'get',
         url: `${CONFIG.URL}/users/${this.$route.params.id}`,
@@ -59,7 +59,7 @@
         response.data.token = this.$route.params.token;
         this.userInfo = response.data
       }).catch((err) => {
-        this.errorMessage = err
+        this.message = err
       });
     },
     components: {

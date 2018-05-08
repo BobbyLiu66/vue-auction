@@ -1,26 +1,20 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-3" style="margin-top: 15px">
-        <Search v-on:search="getSearch"/>
-      </div>
+      <div class="col-3"></div>
       <AuctionList :auctionDetail="auctionDetail"/>
     </div>
   </div>
 </template>
 
 <script>
-  import Navbar from '@/components/Navbar'
   import AuctionList from '@/components/AuctionList'
-  import Search from '@/components/Search'
   import CONFIG from '../CONFIG'
 
   export default {
-    name: "Home",
+    name: "UserAuction",
     components: {
-      Navbar,
-      AuctionList,
-      Search
+      AuctionList
     },
     data() {
       return {
@@ -37,22 +31,29 @@
         }
       }
     },
-    methods: {
-      getSearch: function (result) {
-        this.auctionDetail = result
-      }
-    },
     created() {
+
+      let url = `${CONFIG.URL}/auctions`;
+      if (this.$route.params.seller) {
+        url += `?seller=${this.$route.params.id}`
+      }
+      if (this.$route.params.winner) {
+        url += `?winner=${this.$route.params.id}`
+      }
+      if (this.$route.params.bidder) {
+        url += `?bidder=${this.$route.params.id}`
+      }
+
       axios({
         method: 'get',
-        url: `${CONFIG.URL}/auctions`,
+        url: url,
       }).then((response) => {
+        //TODO if [] add message
         this.auctionDetail = response.data
       }).catch((err) => {
         this.message = err
       });
-    },
-
+    }
   }
 </script>
 

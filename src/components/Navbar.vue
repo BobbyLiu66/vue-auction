@@ -16,8 +16,10 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <router-link class="dropdown-item" :to="{name:'UserInfo',params:{id:this.id,token:this.token}}">Profile
             </router-link>
-            <router-link class="dropdown-item" to="/auction">My Auction Bid</router-link>
-            <router-link class="dropdown-item" to="/auction">My Auction Items</router-link>
+            <router-link class="dropdown-item" :to="{name:''}">My Bid</router-link>
+            <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,seller:true}}">My Auction
+              Items
+            </router-link>
             <button class="dropdown-item" @click="logout">Log Out</button>
           </div>
         </li>
@@ -46,7 +48,7 @@
 
   export default {
     name: "Navbar",
-    beforeMount(){
+    beforeMount() {
       this.username = window.sessionStorage.username;
       this.token = window.sessionStorage.token;
       this.id = window.sessionStorage.id;

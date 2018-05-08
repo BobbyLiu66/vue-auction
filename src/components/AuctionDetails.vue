@@ -99,7 +99,6 @@
     methods: {
       bid: function () {
       },
-      //TODO
       checkDate: function (dateTime) {
         const time = new Date(dateTime);
         const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
