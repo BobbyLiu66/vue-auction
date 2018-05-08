@@ -87,7 +87,7 @@
             password: this.password,
           }
         }).then(() => {
-          this.$emit('modifyMethod', this.modifyInfo);
+          this.$emit('modified', this.modifyInfo);
           this.message = "change information success";
           setInterval(function (){$('#Modify').modal('hide')},1000)
         })
