@@ -60,7 +60,8 @@
       return {
         username: '',
         token: '',
-        id: ''
+        id: '',
+        message:''
       }
     },
     components: {
@@ -72,16 +73,15 @@
         axios({
           method: 'post',
           url: `${CONFIG.URL}/users/logout`,
-          data: {
-            username: this.username,
-            email: this.email,
-            password: this.password,
+          headers: {
+            token: window.sessionStorage.token
           }
         }).then((response) => {
-          this.results = response;
+          window.sessionStorage = {};
+          this.message = response;
         })
           .catch((err) => {
-            this.errorMessage = err
+            this.message = err
           });
       },
       userInfo: function (response) {
