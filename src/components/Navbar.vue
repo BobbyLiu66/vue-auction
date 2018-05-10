@@ -16,6 +16,7 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <router-link class="dropdown-item" :to="{name:'UserInfo',params:{id:this.id,token:this.token}}">Profile
             </router-link>
+            <!--TODO api wrong ?-->
             <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,bidder:true,type:'bidder'}}">My Bid Items</router-link>
             <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,seller:true,type:'seller'}}">My Soled
               Items
@@ -54,7 +55,7 @@
     beforeMount() {
       this.username = window.sessionStorage.username;
       this.token = window.sessionStorage.token;
-      this.id = window.sessionStorage.id;
+      this.id = window.sessionStorage.userId;
     },
     data() {
       return {
@@ -87,7 +88,7 @@
       userInfo: function (response) {
         this.username = window.sessionStorage.username = response.username;
         this.token = window.sessionStorage.token = response.token;
-        this.id = window.sessionStorage.id = response.id
+        this.id = window.sessionStorage.userId = response.id
       }
     }
   }

@@ -2,9 +2,9 @@
   <div class="container">
     <div class="row">
       <div class="offset-md-2 col-6">
-        <h2>{{result.title}}</h2>
-        <p>{{result.description}}</p>
-        <p class="text-muted">{{result.categoryTitle}}</p>
+        <h2>{{details.title}}</h2>
+        <p>{{details.description}}</p>
+        <p class="text-muted">{{details.categoryTitle}}</p>
       </div>
     </div>
     <div class="row">
@@ -16,30 +16,40 @@
         <table class="table">
           <tr>
             <td>Reserve Price:</td>
-            <td>NZD{{result.reservePrice}}</td>
+            <td>NZD{{details.reservePrice}}</td>
           </tr>
           <tr>
             <td>Starting Price:</td>
-            <td>NZD{{result.startingBid}}</td>
+            <td>NZD{{details.startingBid}}</td>
           </tr>
           <tr>
             <td>Current Price:</td>
-            <td>NZD{{result.currentBid}}</td>
+            <td>NZD{{details.currentBid}}</td>
           </tr>
-          <tr>
+          <tr v-if="details.seller.username !== username">
             <td>your bid amount:</td>
             <td><input type="number" class="form-control form-control-sm" placeholder="Enter your bid amount."/>
             </td>
           </tr>
-          <tr>
+          <tr v-if="details.seller.username !== username">
             <td colspan="2" class="text-center">
               <button type="button" class="btn btn-primary" @click="bid">Bid Now</button>
             </td>
           </tr>
-          <tr>
+          <tr v-if="details.seller.username === username && details.startDateTime > new Date()">
+            <td colspan="2" class="text-center">
+
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modify">
+                Modify your auction
+              </button>
+              <AuctionModify :modify="details" v-on="updateAuctionInfo"/>
+            </td>
+          </tr>
+          <tr v-if="details.seller.username !== username">
             <td colspan="2" class="text-center">
               <p class="text-muted">Seller Detail:
-                <router-link :to="{name:'UserInfo',params:{id:result.seller.id}}">{{result.seller.username}}</router-link>
+                <router-link :to="{name:'UserInfo',params:{id:details.seller.id}}">{{details.seller.username}}
+                </router-link>
               </p>
             </td>
           </tr>
@@ -51,7 +61,7 @@
             <th class="text-center" colspan="3"><a href="#" @click="bidHistory">Bid History</a></th>
           </tr>
           </thead>
-          <tbody v-for="bids in result.bids" v-bind:class="{'history':bidHistoryStatus}">
+          <tbody v-for="bids in bidList" v-bind:class="{'history':bidHistoryStatus}">
 
           <tr v-if="!checkDate(bids.datetime)">
             <td colspan="3">{{monthDate(bids.datetime)}}</td>
@@ -59,7 +69,8 @@
           <tr>
             <td>NZD{{bids.amount}}</td>
             <td>
-              <router-link :to="{name:'UserInfo',params:{id:bids.buyerId}}"><p class="text-truncate">{{bids.buyerUsername}}</p></router-link>
+              <router-link :to="{name:'UserInfo',params:{id:bids.buyerId}}"><p class="text-truncate">
+                {{bids.buyerUsername}}</p></router-link>
             </td>
             <td>{{hourMinutes(bids.datetime)}}</td>
           </tr>
@@ -76,28 +87,47 @@
 
 <script>
   import CONFIG from '../CONFIG'
+  import AuctionModify from './AuctionModify'
+
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
   export default {
     name: "AuctionDetails",
+    components: {
+      AuctionModify
+    },
     data() {
       return {
         bidHistoryStatus: true,
-        result: {seller:{}},
-        previousDate: ''
+        details: {seller: {}},
+        bidList: [],
+        previousDate: '',
+        message: '',
+        username: window.sessionStorage.username
       }
     },
-    created(){
+    created() {
       axios({
         method: 'get',
         url: `${CONFIG.URL}/auctions/${this.$route.params.id}`,
       }).then((response) => {
-        this.result = response.data
+        this.details = response.data;
+        // this.bidList = response.data.bid
       }).catch((err) => {
-        this.errorMessage = err
+        this.message = err
       });
     },
+
+    computed: {
+      updateAuctionInfo: function (response) {
+        this.details = response
+      }
+    },
+
+
     methods: {
       bid: function () {
+
       },
       checkDate: function (dateTime) {
         const time = new Date(dateTime);

@@ -76,7 +76,6 @@
             </div>
           </div>
         </div>
-
       </div>
       <div class="col-3"></div>
       <AuctionList :auctionDetail="auctions"/>
@@ -167,9 +166,7 @@
       },
 
 
-      //TODO
       createAuction: function () {
-        console.log(this.validateDateTime());
         if(this.validateDateTime()){
           axios({
             method: 'post',
