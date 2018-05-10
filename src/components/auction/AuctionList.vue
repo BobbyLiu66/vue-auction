@@ -3,7 +3,7 @@
     <div v-for="auction in auctions">
       <div class="row"><h5 v-if="auction.additional" class="auction">{{auction.additional}}</h5></div>
       <div class="row border auction">
-        <div class="col-3"><img src="../assets/test.jpg" alt=""/></div>
+        <div class="col-3"><img src="../../assets/test.jpg" alt=""/></div>
         <div class="col-7 offset-md-2">
           <ul class="list-group">
             <li class="auction text-primary">

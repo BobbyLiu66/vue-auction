@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import AuctionPhoto from '@/components/AuctionPhoto'
-import UserInfo from '@/components/UserInfo'
-import AuctionDetails from '@/components/AuctionDetails'
+import UserInfo from '@/components/user/UserInfo'
+import AuctionDetails from '@/components/auction/AuctionDetails'
 import Home from '@/components/Home'
-import UserAuction from '@/components/UserAuction'
+import UserAuction from '@/components/user/UserAuction'
 
 Vue.use(Router);
 
@@ -25,11 +24,6 @@ export default new Router({
       path: '/user/info',
       name: 'UserInfo',
       component: UserInfo
-    },
-    {
-      path: '/auction/photo',
-      name: 'AuctionPhoto',
-      component: AuctionPhoto
     },
     {
       path: '/auction/details/:id',

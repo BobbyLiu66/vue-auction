@@ -11,8 +11,8 @@
 
 <script>
   import Navbar from '@/components/Navbar'
-  import AuctionList from '@/components/AuctionList'
-  import Search from '@/components/Search'
+  import AuctionList from '@/components/auction/AuctionList'
+  import Search from '@/components/auction/AuctionSearch'
   import CONFIG from '../CONFIG'
 
   export default {

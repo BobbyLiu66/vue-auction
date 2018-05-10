@@ -56,7 +56,7 @@
 
 <script>
   //TODO some bugs
-  import CONFIG from '../CONFIG'
+  import CONFIG from '../../CONFIG'
   export default {
     props:['modify'],
     computed: {

@@ -32,8 +32,8 @@
 </template>
 
 <script>
-  import ModifyUser from './ModifyUser'
-  import CONFIG from '../CONFIG'
+  import ModifyUser from './UserModify'
+  import CONFIG from '../../CONFIG'
 
   export default {
     name: "UserInfo",

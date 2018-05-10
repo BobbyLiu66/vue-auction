@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import CONFIG from '../CONFIG'
+  import CONFIG from '../../CONFIG'
 
   export default {
     name: "Search",

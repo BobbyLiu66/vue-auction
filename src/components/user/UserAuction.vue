@@ -84,8 +84,8 @@
 </template>
 
 <script>
-  import AuctionList from '@/components/AuctionList'
-  import CONFIG from '../CONFIG'
+  import AuctionList from '@/components/auction/AuctionList'
+  import CONFIG from '../../CONFIG'
 
   export default {
     name: "UserAuction",

@@ -46,8 +46,8 @@
 </template>
 
 <script>
-  import Login from './Login'
-  import SignIn from './SignIn'
+  import Login from './user/UserLogin'
+  import SignIn from './user/UserRegister'
   import CONFIG from '../CONFIG'
 
   export default {
