@@ -1,6 +1,10 @@
 <template>
   <div class="container">
+    <div v-if="message" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+      <span>{{message}}</span>
+    </div>
     <div class="row">
+
       <div class="offset-md-2 col-6">
         <h2>{{details.title}}</h2>
         <p>{{details.description}}</p>
@@ -28,7 +32,8 @@
           </tr>
           <tr v-if="details.seller.id !== userId">
             <td>your bid amount:</td>
-            <td><input type="number" class="form-control form-control-sm" placeholder="Enter your bid amount."/>
+            <td><input type="number" class="form-control form-control-sm" placeholder="Enter your bid amount."
+                       v-model="userBid"/>
             </td>
           </tr>
           <tr v-if="details.seller.id !== userId">
@@ -36,10 +41,9 @@
               <button type="button" class="btn btn-primary" @click="bid">Bid Now</button>
             </td>
           </tr>
-          <tr v-if="details.seller.id === userId && details.startDateTime > new Date()">
+          <tr v-if="details.seller.id === userId">
             <td colspan="2" class="text-center">
-
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modify">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modify" :disabled="details.startDateTime <= new Date()">
                 Modify your auction
               </button>
               <AuctionModify :modify="details" v-on="updateAuctionInfo"/>
@@ -88,7 +92,6 @@
 <script>
   import CONFIG from '../../CONFIG'
   import AuctionModify from './AuctionModify'
-  import {mapGetters} from 'vuex'
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -104,21 +107,11 @@
         bidList: [],
         previousDate: '',
         message: '',
+        userBid: ''
       }
     },
     created() {
-      axios({
-        method: 'get',
-        url: `${CONFIG.URL}/auctions/${this.$route.params.id}`,
-      }).then((response) => {
-        this.details = response.data;
-        this.details.startTime = this.formatDate(this.details.startDateTime);
-        this.details.endTime = this.formatDate(this.details.endDateTime);
-        this.bidList = response.data.bid;
-        this.userId = parseInt(window.sessionStorage.userId)
-      }).catch((err) => {
-        this.message = err
-      });
+      this.getInformation()
     },
 
     computed: {
@@ -129,27 +122,59 @@
           this.details = response
         }
       },
-      userId: {
-        get: function () {
-          if(this.$store.getters.refresh){
-           return parseInt(window.sessionStorage.userId)
-          }
-        },
-        set: function (response) {
-          return response
-        }
+      userId() {
+          this.$store.getters.refresh
+          return parseInt(window.sessionStorage.userId)
       }
     },
 
 
     methods: {
+      getInformation: function () {
+        axios({
+          method: 'get',
+          url: `${CONFIG.URL}/auctions/${this.$route.params.id}`,
+        }).then((response) => {
+          this.details = response.data;
+          this.details.startTime = this.formatDate(this.details.startDateTime);
+          this.details.endTime = this.formatDate(this.details.endDateTime);
+          this.bidList = response.data.bids;
+        }).catch((err) => {
+          this.message = err;
+          setTimeout(() => {
+            this.message = ''
+          }, 5 * 1000)
+        });
+      },
       formatDate: function (date) {
         const dateTime = new Date(date);
         return `${dateTime.getFullYear()}-${dateTime.getMonth() + 1 < 10 ? "0" + (dateTime.getMonth() + 1) : dateTime.getMonth() + 1}-${dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate()}`;
       },
       //TODO
       bid: function () {
+        if (this.userBid <= this.details.currentBid) {
+          this.message = "Bid amount should be more than current bid amount"
+        }
+        else if (!window.sessionStorage.token) {
+          this.message = "Your should login before you make bid"
+        }
+        else {
+          axios({
+            method: 'post',
+            url: `${CONFIG.URL}/auctions/${this.$route.params.id}/bids?amount=${parseInt(this.userBid)}`,
+            headers: {
+              'X-Authorization': window.sessionStorage.token
+            }
+          }).then(() => {
+            this.getInformation()
+          }).catch((err) => {
+            this.message = err
+          });
+        }
 
+        setTimeout(() => {
+          this.message = ''
+        }, 5 * 1000)
       },
       checkDate: function (dateTime) {
         const time = new Date(dateTime);
