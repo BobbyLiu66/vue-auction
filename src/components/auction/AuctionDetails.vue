@@ -166,6 +166,7 @@
               'X-Authorization': window.sessionStorage.token
             }
           }).then(() => {
+            this.message = 'bid success';
             this.getInformation()
           }).catch((err) => {
             this.message = err
