@@ -150,7 +150,6 @@
         const dateTime = new Date(date);
         return `${dateTime.getFullYear()}-${dateTime.getMonth() + 1 < 10 ? "0" + (dateTime.getMonth() + 1) : dateTime.getMonth() + 1}-${dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate()}`;
       },
-      //TODO
       bid: function () {
         if (this.userBid <= this.details.currentBid) {
           this.message = "Bid amount should be more than current bid amount"
