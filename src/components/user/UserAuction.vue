@@ -172,7 +172,7 @@
             method: 'post',
             url: `${CONFIG.URL}/auctions`,
             headers: {
-              'X-Authorization': window.sessionStorage.token
+              'X-Authorization': this.$store.token
             },
             data:{
               "categoryId": parseInt(this.categoryId),

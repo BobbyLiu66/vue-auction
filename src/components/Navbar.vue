@@ -53,9 +53,9 @@
   export default {
     name: "Navbar",
     beforeMount() {
-      this.username = window.sessionStorage.username;
-      this.token = window.sessionStorage.token;
-      this.id = window.sessionStorage.userId;
+      this.username = this.$username;
+      this.token = this.$token;
+      this.id = this.$userId;
     },
     data() {
       return {
@@ -75,10 +75,9 @@
           method: 'post',
           url: `${CONFIG.URL}/users/logout`,
           headers: {
-            token: window.sessionStorage.token
+            token: this.$token
           }
         }).then((response) => {
-          window.sessionStorage = {};
           this.message = response;
         })
           .catch((err) => {
@@ -86,9 +85,12 @@
           });
       },
       userInfo: function (response) {
-        this.username = window.sessionStorage.username = response.username;
-        this.token = window.sessionStorage.token = response.token;
-        this.id = window.sessionStorage.userId = response.id
+        this.$store.commit('setUsername', response.username);
+        this.$store.commit('setUserId', response.id);
+        this.$store.commit('setToken', response.token);
+        this.username = response.username;
+        this.token = response.token;
+        this.id = response.id
       }
     }
   }

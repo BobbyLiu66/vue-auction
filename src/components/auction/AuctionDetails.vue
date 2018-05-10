@@ -102,12 +102,14 @@
         details: {seller: {}},
         bidList: [],
         previousDate: '',
-        message: '',
-        userId: ''
+        message: ''
       }
     },
-    beforeMount() {
-      this.userId = parseInt(window.sessionStorage.userId);
+    watch: {
+      '$store'() {
+        console.log(this.$store.token)
+      },
+      deep: true
     },
     created() {
       axios({
@@ -124,10 +126,13 @@
     },
 
     computed: {
-      updateAuctionInfo: function (response) {
+      updateAuctionInfo (response) {
         this.details.startTime = this.formatDate(response.startDateTime);
         this.details.endTime = this.formatDate(response.endDateTime);
         this.details = response
+      },
+      userId (){
+        return this.$store.state.userId
       }
     },
 
@@ -137,6 +142,7 @@
         const dateTime = new Date(date);
         return `${dateTime.getFullYear()}-${dateTime.getMonth() + 1 < 10 ? "0" + (dateTime.getMonth() + 1) : dateTime.getMonth() + 1}-${dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate()}`;
       },
+      //TODO
       bid: function () {
 
       },
