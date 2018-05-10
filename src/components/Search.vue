@@ -62,14 +62,15 @@
       search: function () {
         axios({
           method: 'get',
-          url: `${CONFIG.URL}/auctions?startIndex=${this.startIndex}&count=${this.count}&q=${this.q}&category-id=${this.categoryId}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}`,
+          url: `${CONFIG.URL}/auctions?startIndex=${this.startIndex}&count=${this.count}&q=${this.q}&category-id=${this.categoryId}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}&status=active`,
           headers: {
             'X-Authorization': window.sessionStorage.token
           },
         }).then((response) => {
           this.$emit('search', response.data);
         }).catch((err) => {
-          this.message = err
+          //TODO
+          this.$emit('search', err);
         });
       }
     },

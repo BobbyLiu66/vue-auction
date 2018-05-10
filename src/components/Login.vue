@@ -60,14 +60,19 @@
         let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
       },
+
       login: function () {
-        let value = "username";
+        let data = {username: '', email: '', password: this.password};
         if (this.validateEmail(this.username)) {
-          value = "email"
+          data.email = this.username
+        }
+        else {
+          data.username = this.username
         }
         axios({
           method: 'post',
-          url: `${CONFIG.URL}/users/login?${value}=${this.username}&password=${this.password}`,
+          url: `${CONFIG.URL}/users/login`,
+          data: data
         }).then((response) => {
           this.$emit('loginMethod', {token: response.data.token, username: this.username, id: response.data.id});
           $('#Login').modal('hide');

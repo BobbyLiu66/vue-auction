@@ -22,8 +22,8 @@
               </div>
               <div class="modal-body">
 
-                <div v-if="message" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-                  <span>{{message}}</span>
+                <div v-if="createMessage" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+                  <span>{{createMessage}}</span>
                 </div>
 
                 <label for="categoryId" class="col-form-label">Category Id:</label>
@@ -103,7 +103,8 @@
         startDateTime: '',
         endDateTime: '',
         reservePrice: '',
-        startingBid: ''
+        startingBid: '',
+        createMessage:''
       }
     },
 
@@ -134,7 +135,6 @@
         if (this.$route.params.type === 'bidder') {
           url += `?bidder=${this.$route.params.id}`
         }
-
         axios({
           method: 'get',
           url: url,
@@ -165,12 +165,41 @@
           this.message = err
         });
       },
+
+
       //TODO
       createAuction: function () {
-
+        console.log(this.validateDateTime());
+        if(this.validateDateTime()){
+          axios({
+            method: 'post',
+            url: `${CONFIG.URL}/auctions`,
+            headers: {
+              'X-Authorization': window.sessionStorage.token
+            },
+            data:{
+              "categoryId": parseInt(this.categoryId),
+              "title": this.title,
+              "description": this.description,
+              "startDateTime": (new Date(this.startDateTime)).getTime(),
+              "endDateTime": (new Date(this.endDateTime)).getTime(),
+              "reservePrice": parseInt(this.reservePrice),
+              "startingBid": parseInt(this.startingBid)
+            }
+          }).then(() => {
+            this.message = "create auction success";
+            $('#Create').modal('hide');
+            this.getDate()
+          }).catch((err) => {
+            this.message = err
+          });
+        }
+        else {
+          this.createMessage = "Start Date Time or End Date Time is illegal"
+        }
       },
       validateDateTime: function () {
-
+        return !(new Date(this.endDateTime) < new Date(this.startDateTime) || new Date(this.startDateTime) < new Date());
       }
     },
     created() {
