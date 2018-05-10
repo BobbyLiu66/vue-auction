@@ -17,11 +17,18 @@
             <router-link class="dropdown-item" :to="{name:'UserInfo',params:{id:this.id,token:this.token}}">Profile
             </router-link>
             <!--TODO api wrong ?-->
-            <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,bidder:true,type:'bidder'}}">My Bid Items</router-link>
-            <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,seller:true,type:'seller'}}">My Soled
+            <router-link class="dropdown-item"
+                         :to="{name:'UserAuction',params:{id:this.id,token:this.token,bidder:true,type:'bidder'}}">My
+              Bid Items
+            </router-link>
+            <router-link class="dropdown-item"
+                         :to="{name:'UserAuction',params:{id:this.id,token:this.token,seller:true,type:'seller'}}">My
+              Soled
               Items
             </router-link>
-            <router-link class="dropdown-item" :to="{name:'UserAuction',params:{id:this.id,token:this.token,winner:true,type:'winner'}}">My Wined
+            <router-link class="dropdown-item"
+                         :to="{name:'UserAuction',params:{id:this.id,token:this.token,winner:true,type:'winner'}}">My
+              Wined
               Items
             </router-link>
             <button class="dropdown-item" @click="logout">Log Out</button>
@@ -53,16 +60,16 @@
   export default {
     name: "Navbar",
     beforeMount() {
-      this.username = this.$username;
-      this.token = this.$token;
-      this.id = this.$userId;
+      this.username = window.sessionStorage.username;
+      this.token = window.sessionStorage.token;
+      this.id = window.sessionStorage.userId
     },
     data() {
       return {
         username: '',
         token: '',
         id: '',
-        message:''
+        message: ''
       }
     },
     components: {
@@ -75,22 +82,24 @@
           method: 'post',
           url: `${CONFIG.URL}/users/logout`,
           headers: {
-            token: this.$token
+            'X-Authorization': this.token
           }
-        }).then((response) => {
-          this.message = response;
-        })
-          .catch((err) => {
-            this.message = err
-          });
+        }).then(() => {
+          this.username = window.sessionStorage.username = '';
+          this.token = window.sessionStorage.token = '';
+          this.id = window.sessionStorage.userId = '';
+          this.$store.commit('refresh')
+        }).catch((err) => {
+          this.message = err
+        });
       },
+
+
       userInfo: function (response) {
-        this.$store.commit('setUsername', response.username);
-        this.$store.commit('setUserId', response.id);
-        this.$store.commit('setToken', response.token);
-        this.username = response.username;
-        this.token = response.token;
-        this.id = response.id
+        this.username = window.sessionStorage.username = response.username;
+        this.token = window.sessionStorage.token = response.token;
+        this.id = window.sessionStorage.userId = response.id;
+        this.$store.commit('refresh')
       }
     }
   }

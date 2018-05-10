@@ -88,6 +88,7 @@
 <script>
   import CONFIG from '../../CONFIG'
   import AuctionModify from './AuctionModify'
+  import {mapGetters} from 'vuex'
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -102,14 +103,8 @@
         details: {seller: {}},
         bidList: [],
         previousDate: '',
-        message: ''
+        message: '',
       }
-    },
-    watch: {
-      '$store'() {
-        console.log(this.$store.token)
-      },
-      deep: true
     },
     created() {
       axios({
@@ -119,26 +114,36 @@
         this.details = response.data;
         this.details.startTime = this.formatDate(this.details.startDateTime);
         this.details.endTime = this.formatDate(this.details.endDateTime);
-        this.bidList = response.data.bid
+        this.bidList = response.data.bid;
+        this.userId = parseInt(window.sessionStorage.userId)
       }).catch((err) => {
         this.message = err
       });
     },
 
     computed: {
-      updateAuctionInfo (response) {
-        this.details.startTime = this.formatDate(response.startDateTime);
-        this.details.endTime = this.formatDate(response.endDateTime);
-        this.details = response
+      updateAuctionInfo(response) {
+        if (response.startDateTime) {
+          this.details.startTime = this.formatDate(response.startDateTime);
+          this.details.endTime = this.formatDate(response.endDateTime);
+          this.details = response
+        }
       },
-      userId (){
-        return this.$store.state.userId
+      userId: {
+        get: function () {
+          if(this.$store.getters.refresh){
+           return parseInt(window.sessionStorage.userId)
+          }
+        },
+        set: function (response) {
+          return response
+        }
       }
     },
 
 
     methods: {
-      formatDate:function(date){
+      formatDate: function (date) {
         const dateTime = new Date(date);
         return `${dateTime.getFullYear()}-${dateTime.getMonth() + 1 < 10 ? "0" + (dateTime.getMonth() + 1) : dateTime.getMonth() + 1}-${dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate()}`;
       },

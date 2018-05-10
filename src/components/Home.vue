@@ -38,7 +38,7 @@
       }
     },
     methods: {
-      getSearch: function (result) {
+      getSearch(result) {
         this.auctionDetail = result
       }
     },

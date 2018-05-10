@@ -8,20 +8,17 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    username:'',
-    userId:'',
-    token:''
+    needRefresh: false
   },
   mutations: {
-    setUsername (state, value) {
-      state.username = value
-    },
-    setUserId (state, value) {
-      state.userId = value
-    },
-    setToken (state, value) {
-      state.token = value
-    },
+    refresh(state) {
+      state.needRefresh = !state.needRefresh
+    }
+  },
+  getters: {
+    refresh: (state) => {
+      return state.needRefresh
+    }
   }
 });
 
@@ -29,6 +26,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {App},
   template: '<App/>'
 });
