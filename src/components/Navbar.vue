@@ -42,7 +42,7 @@
         <Login v-on:loginMethod="userInfo"/>
 
         <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#SignIn">
-          Sign In
+          Register
         </button>
         <SignIn v-on:signIn="userInfo"/>
       </form>

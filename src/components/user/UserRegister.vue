@@ -91,7 +91,11 @@
         }).then(() => {
           axios({
             method: 'post',
-            url: `${CONFIG.URL}/users/login?username=${this.username}&password=${this.password}`,
+            url: `${CONFIG.URL}/users/login`,
+            data:{
+              username:this.username,
+              password:this.password
+            }
           }).then((response)=>{
             this.$emit('signIn', {token:response.data.token, username:this.username,id:response.data.id});
             $('#SignIn').modal('hide')
