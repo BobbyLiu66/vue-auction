@@ -6,7 +6,7 @@
           <span>{{message}}</span>
         </div>
       </div>
-      <div class="col-12 text-center">
+      <div class="col-md-9 offset-md-3 text-center">
         <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#Create">
           Create Auction
         </button>
@@ -68,6 +68,13 @@
                          v-model="endDateTime"
                          required>
                 </div>
+
+                <label for="categoryId" class="col-form-label">Photo:</label>
+                <div class="input-group mb-3">
+                  <div class="custom-file">
+                    <input type="file" accept="image/png,image/jpeg" class="form-control" id="photo" placeholder="Choose photo" @change="onPhotoChanged">
+                  </div>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -103,7 +110,8 @@
         endDateTime: '',
         reservePrice: '',
         startingBid: '',
-        createMessage:''
+        createMessage:'',
+        photo:''
       }
     },
 
@@ -117,13 +125,19 @@
         }
       }
     },
+
     watch: {
       '$route'() {
         this.getDate()
       }
     },
     methods: {
-      getDate: function () {
+      onPhotoChanged(event){
+        this.photo = event.target.files[0];
+        this.fileType = /[^.]+$/.exec(event.target.files[0].name)[0];
+      },
+
+      getDate() {
         let url = `${CONFIG.URL}/auctions`;
         if (this.$route.params.type === 'seller') {
           url += `?seller=${this.$route.params.id}`
@@ -165,8 +179,8 @@
         });
       },
 
+      createAuction() {
 
-      createAuction: function () {
         if(this.validateDateTime()){
           axios({
             method: 'post',
@@ -183,10 +197,20 @@
               "reservePrice": parseInt(this.reservePrice),
               "startingBid": parseInt(this.startingBid)
             }
-          }).then(() => {
-            this.message = "create auction success";
-            $('#Create').modal('hide');
-            this.getDate()
+          }).then((response) => {
+            axios({
+              method:'post',
+              url:`${CONFIG.URL}/auctions/${response.data.id}/photos`,
+              headers: {
+                'X-Authorization': window.sessionStorage.token,
+                'Content-Type': `image/${this.fileType}`
+              },
+              data:this.photo
+            }).then(()=>{
+              this.message = "create auction success";
+              $('#Create').modal('hide');
+              this.getDate()
+            }).catch((err)=>{this.message = err});
           }).catch((err) => {
             this.message = err
           });
@@ -195,7 +219,8 @@
           this.createMessage = "Start Date Time or End Date Time is illegal"
         }
       },
-      validateDateTime: function () {
+
+      validateDateTime() {
         return !(new Date(this.endDateTime) < new Date(this.startDateTime) || new Date(this.startDateTime) < new Date());
       }
     },
