@@ -44,11 +44,19 @@
 <script>
   export default {
     name: "AuctionList",
-    props: ['auctionDetail'],
+    props: ['auctionDetail','categorySearch'],
     computed: {
       auctions: function () {
-        return this.auctionDetail
-      }
+        let result = this.auctionDetail;
+        if(this.categorySearch){
+          result = [];
+          this.auctionDetail.map((detail)=>{
+            detail.categoryId === this.categorySearch && result.push(detail)
+          });
+        }
+        return result
+      },
+
     },
 
   }

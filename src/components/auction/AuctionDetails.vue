@@ -151,12 +151,13 @@
         return `${dateTime.getFullYear()}-${dateTime.getMonth() + 1 < 10 ? "0" + (dateTime.getMonth() + 1) : dateTime.getMonth() + 1}-${dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate()}`;
       },
       bid: function () {
-        if (this.userBid <= this.details.currentBid) {
-          this.message = "Bid amount should be more than current bid amount"
-        }
-        else if (!window.sessionStorage.token) {
+        if (!window.sessionStorage.token) {
           this.message = "Your should login before you make bid"
         }
+        else if (this.userBid <= this.details.currentBid) {
+          this.message = "Bid amount should be more than current bid amount"
+        }
+
         else {
           axios({
             method: 'post',
