@@ -11,8 +11,8 @@
         </div>
         <div class="modal-body">
 
-          <div v-if="errorMessage" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-            <span>{{errorMessage}}</span>
+          <div v-if="message" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+            <span>{{message}}</span>
           </div>
 
           <label for="inputUsername" class="col-form-label">Username/Email:</label>
@@ -21,6 +21,7 @@
             <input type="text" class="form-control" id="inputUsername" placeholder="Enter username/email"
                    v-model="username"
                    required>
+
           </div>
 
           <label for="inputPassword" class="col-form-label">Password:</label>
@@ -29,6 +30,7 @@
             <input type="password" class="form-control" id="inputPassword" placeholder="Enter password"
                    v-model="password"
                    required>
+
           </div>
         </div>
         <div class="modal-footer">
@@ -51,7 +53,7 @@
         results: '',
         username: '',
         password: '',
-        errorMessage: ''
+        message: ''
       }
     },
 
@@ -69,16 +71,23 @@
         else {
           data.username = this.username
         }
-        axios({
-          method: 'post',
-          url: `${CONFIG.URL}/users/login`,
-          data: data
-        }).then((response) => {
-          this.$emit('loginMethod', {token: response.data.token, username: this.username, id: response.data.id});
-          $('#Login').modal('hide');
-        }).catch((err) => {
-          this.errorMessage = err
-        });
+        if(!this.username || !this.password){
+          this.message = "Input your login information";
+          setInterval(()=>{this.message = ''},5 * 1000)
+        }
+        else {
+          axios({
+            method: 'post',
+            url: `${CONFIG.URL}/users/login`,
+            data: data
+          }).then((response) => {
+            this.$emit('loginMethod', {token: response.data.token, username: this.username, id: response.data.id});
+            $('#Login').modal('hide');
+          }).catch((err) => {
+            this.message = err;
+            setInterval(()=>{this.message = ''},5 * 1000)
+          });
+        }
       }
     },
     name: "Login"
