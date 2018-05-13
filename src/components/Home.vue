@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div class="container-float">
     <div class="row">
-      <div class="col-3" style="margin-top: 15px">
+      <div class="col-2 offset-md-1" style="margin-top: 15px">
         <Search v-on:search="getSearch" v-on:categorySearch="getCategoryId"/>
       </div>
       <AuctionList :auctionDetail="auctionDetail" :categorySearch="categorySearch"/>

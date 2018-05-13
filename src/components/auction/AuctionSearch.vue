@@ -2,10 +2,15 @@
 
   <div>
     <h5>Shop by Category</h5>
+    <div class="custom-control custom-radio">
+      <input type="radio" @change="categorySearch" id="allCategory" value=""
+             class="custom-control-input" v-model="radioCategory">
+      <label class="custom-control-label" for="allCategory">All</label>
+    </div>
     <div v-for="category in categories">
-
       <div class="custom-control custom-radio">
-        <input type="radio" @change="categorySearch" v-bind:id="category.categoryId" name="customRadio" v-bind:value="category.categoryId" class="custom-control-input" v-model="radioCategory">
+        <input type="radio" @change="categorySearch" v-bind:id="category.categoryId" v-bind:value="category.categoryId"
+               class="custom-control-input" v-model="radioCategory">
         <label class="custom-control-label" v-bind:for="category.categoryId">{{category.categoryTitle}}</label>
       </div>
     </div>
@@ -49,6 +54,26 @@
         <input type="number" class="form-control form-control-sm" id="winner" placeholder="Enter winner."
                v-model="winner">
       </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="All" v-model="status" checked value="all">
+        <label class="custom-control-label" for="All">All</label>
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="Active" v-model="status" value="active">
+        <label class="custom-control-label" for="Active">Active</label>
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="Expired" v-model="status" value="expired">
+        <label class="custom-control-label" for="Expired">Expired</label>
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="Won" v-model="status" value="won">
+        <label class="custom-control-label" for="Won">Won</label>
+      </div>
+      <div class="custom-control custom-radio custom-control-inline">
+        <input type="radio" class="custom-control-input" id="Upcoming" v-model="status" value="upcoming">
+        <label class="custom-control-label" for="Upcoming">Upcoming</label>
+      </div>
       <div class="form-group text-center">
         <button type="button" class="btn btn-primary" @click="search">Search</button>
       </div>
@@ -63,7 +88,7 @@
     name: "Search",
     data() {
       return {
-        radioCategory:'',
+        radioCategory: '',
         display: false,
         startIndex: '',
         count: '',
@@ -72,7 +97,8 @@
         seller: '',
         bidder: '',
         winner: '',
-        categories:[]
+        status: '',
+        categories: []
       }
     },
     beforeMount() {
@@ -80,16 +106,16 @@
         method: 'get',
         url: `${CONFIG.URL}/categories`,
       }).then((response) => {
-         this.categories = response.data
+        this.categories = response.data
       }).catch((err) => {
         //TODO
       });
     },
     methods: {
-      search: function () {
+      search() {
         axios({
           method: 'get',
-          url: `${CONFIG.URL}/auctions?startIndex=${this.startIndex}&count=${this.count}&q=${this.q}&category-id=${this.categoryId}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}&status=active`,
+          url: `${CONFIG.URL}/auctions?status=${this.status}&startIndex=${this.startIndex}&count=${this.count}&q=${this.q}&category-id=${this.categoryId}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}`,
           headers: {
             'X-Authorization': window.sessionStorage.token
           },
@@ -100,10 +126,10 @@
           this.$emit('search', err);
         });
       },
-      displayed(){
+      displayed() {
         this.display = !this.display
       },
-      categorySearch(){
+      categorySearch() {
         this.$emit('categorySearch', this.radioCategory);
       }
     },
@@ -113,7 +139,7 @@
 </script>
 
 <style scoped>
-  .link{
+  .link {
     margin-top: 30px;
     margin-bottom: 20px;
   }

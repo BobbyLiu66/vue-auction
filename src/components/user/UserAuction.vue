@@ -161,7 +161,7 @@
             const timeLine = new Date();
             let closedFlag = true;
             let processFlag = true;
-            response.data.forEach((data) => {
+            response.data.map((data) => {
               const dataTime = new Date(data.endDateTime);
               if (dataTime < timeLine && closedFlag) {
                 data.additional = 'Closed';
