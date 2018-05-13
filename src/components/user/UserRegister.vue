@@ -14,6 +14,7 @@
             <span>{{message}}</span>
           </div>
 
+          <form @submit="signIn">
             <label for="signInUsername" class="col-form-label">Username: </label>
             <div class="input-group mb-3">
               <input type="text" class="form-control" id="signInUsername" placeholder="Enter username"
@@ -48,11 +49,9 @@
                      v-model="password"
                      required>
             </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" @click="signIn">Sign In</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Register</button>
+          </form>
         </div>
       </div>
     </div>
@@ -77,7 +76,8 @@
     },
 
     methods: {
-      signIn: function () {
+
+      signIn() {
         axios({
           method: 'post',
           url: `${CONFIG.URL}/users`,
@@ -92,18 +92,18 @@
           axios({
             method: 'post',
             url: `${CONFIG.URL}/users/login`,
-            data:{
-              username:this.username,
-              password:this.password
+            data: {
+              username: this.username,
+              password: this.password
             }
-          }).then((response)=>{
-            this.$emit('signIn', {token:response.data.token, username:this.username,id:response.data.id});
+          }).then((response) => {
+            this.$emit('signIn', {token: response.data.token, username: this.username, id: response.data.id});
             $('#SignIn').modal('hide')
-          }).catch((err)=>{
+          }).catch((err) => {
             this.message = err
           })
         }).catch((err) => {
-            this.message = err
+          this.message = err
         });
       }
     },

@@ -11,10 +11,12 @@
         </div>
         <div class="modal-body">
 
+
           <div v-if="message" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
             <span>{{message}}</span>
           </div>
 
+          <form @submit="login">
           <label for="inputUsername" class="col-form-label">Username/Email:</label>
 
           <div class="input-group mb-3">
@@ -30,13 +32,12 @@
             <input type="password" class="form-control" id="inputPassword" placeholder="Enter password"
                    v-model="password"
                    required>
-
           </div>
-        </div>
-        <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" @click="login">Login</button>
+          <button type="submit" class="btn btn-primary">Login</button>
+          </form>
         </div>
+
       </div>
     </div>
   </div>
