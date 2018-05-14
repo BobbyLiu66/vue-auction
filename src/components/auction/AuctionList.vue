@@ -1,5 +1,5 @@
 <template>
-  <div class="col-7 offset-md-1" >
+  <div class="col-7 offset-md-1">
     <div v-if="auctions.length > 0 && Array.isArray(auctions)">
       <div v-for="auction in auctions">
         <div class="row"><h5 v-if="auction.additional" class="auction">{{auction.additional}}</h5></div>
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div v-else-if="auctions.length ===0 ">
+    <div v-else-if="auctions.length === 0 || auctions === undefined">
       <div class="lds-css ng-scope">
         <div class="lds-spinner">
           <div></div>
@@ -53,32 +53,31 @@
     name: "AuctionList",
     props: ['auctionDetail', 'categorySearch'],
     computed: {
-      auctions: function () {
+      auctions () {
         let result = this.auctionDetail;
         if (this.categorySearch) {
           result = [];
           this.auctionDetail.map((detail) => {
             detail.categoryId === this.categorySearch && result.push(detail)
           });
-          if(result.length === 0){
+          if (result.length === 0) {
             result = "No available items found under such category"
           }
         }
-        if (this.auctionDetail.length === 0){
+        if (this.auctionDetail.length === 0) {
           result = "No available items found"
         }
         return result
       },
-
     },
-
   }
 </script>
 
 <style scoped>
-  .alert-position{
-   margin-top: 50px;
+  .alert-position {
+    margin-top: 50px;
   }
+
   ul {
     list-style-type: none;
   }

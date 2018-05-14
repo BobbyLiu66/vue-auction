@@ -16,7 +16,6 @@
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <router-link class="dropdown-item" :to="{name:'UserInfo',params:{id:this.id,token:this.token}}">Profile
             </router-link>
-            <!--TODO api wrong ?-->
             <router-link class="dropdown-item"
                          :to="{name:'UserAuction',params:{id:this.id,token:this.token,bidder:true,type:'bidder'}}">My
               Bid Items
@@ -35,6 +34,11 @@
           </div>
         </li>
       </ul>
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#Create" v-if="this.username">
+        Create Auction
+      </button>
+      <CreateAuction />
+
       <form class="form-inline mt-2 mt-md-0" v-if="!this.username">
         <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Login">
           Login
@@ -53,6 +57,7 @@
 </template>
 
 <script>
+  import CreateAuction from './user/UserAuctionCreate'
   import Login from './user/UserLogin'
   import SignIn from './user/UserRegister'
   import CONFIG from '../CONFIG'
@@ -74,7 +79,8 @@
     },
     components: {
       Login,
-      SignIn
+      SignIn,
+      CreateAuction
     },
     methods: {
       logout: function () {
