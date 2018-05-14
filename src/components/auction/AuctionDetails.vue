@@ -12,10 +12,15 @@
       </div>
     </div>
     <div class="row">
-      <div class="offset-md-2 col-6">
 
-        <img src="../../assets/test.jpg" alt=""/>
+      <div class="offset-md-2 col-6" v-if="id">
+        <img v-bind:src="'http://localhost:4941/api/v1/auctions/'+id+'/photos'" alt=""/>
       </div>
+
+      <div class="offset-md-2 col-6" v-else>
+        <Loading />
+      </div>
+
       <div class="col-3">
         <table class="table">
           <tr>
@@ -43,7 +48,8 @@
           </tr>
           <tr v-if="details.seller.id === userId">
             <td colspan="2" class="text-center">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modify" :disabled="details.startDateTime <= new Date()">
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modify"
+                      :disabled="details.startDateTime <= new Date()">
                 Modify your auction
               </button>
               <AuctionModify :modify="details" v-on="updateAuctionInfo"/>
@@ -70,6 +76,7 @@
           <tr v-if="!checkDate(bids.datetime)">
             <td colspan="3">{{monthDate(bids.datetime)}}</td>
           </tr>
+
           <tr>
             <td>NZD{{bids.amount}}</td>
             <td>
@@ -92,13 +99,15 @@
 <script>
   import CONFIG from '../../CONFIG'
   import AuctionModify from './AuctionModify'
+  import Loading from '../Loading'
 
   const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
   export default {
     name: "AuctionDetails",
     components: {
-      AuctionModify
+      AuctionModify,
+      Loading
     },
     data() {
       return {
@@ -107,7 +116,8 @@
         bidList: [],
         previousDate: '',
         message: '',
-        userBid: ''
+        userBid: '',
+        id: ''
       }
     },
     created() {
@@ -123,8 +133,8 @@
         }
       },
       userId() {
-          this.$store.getters.refresh
-          return parseInt(window.sessionStorage.userId)
+        this.$store.getters.refresh
+        return parseInt(window.sessionStorage.userId)
       }
     },
 
@@ -135,6 +145,7 @@
           method: 'get',
           url: `${CONFIG.URL}/auctions/${this.$route.params.id}`,
         }).then((response) => {
+          this.id = this.$route.params.id;
           this.details = response.data;
           this.details.startTime = this.formatDate(this.details.startDateTime);
           this.details.endTime = this.formatDate(this.details.endDateTime);
