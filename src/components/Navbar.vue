@@ -101,7 +101,7 @@
       },
 
 
-      userInfo: function (response) {
+      userInfo (response) {
         this.username = window.sessionStorage.username = response.username;
         this.token = window.sessionStorage.token = response.token;
         this.id = window.sessionStorage.userId = response.id;

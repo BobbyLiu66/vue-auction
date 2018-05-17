@@ -1,7 +1,7 @@
 <template>
   <div class="modal fade fade bd-example-modal-lg" id="Modify" tabindex="-1" role="dialog"
        aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" v-if="result.length !== 0">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Modify Your Auction Here</h5>
@@ -18,43 +18,43 @@
           <label for="categoryId" class="col-form-label">Category Id:</label>
           <div class="input-group mb-3">
             <input type="text" class="form-control" id="categoryId" placeholder="Enter Category Id."
-                   v-model="modify.categoryId"
+                   v-model="result.categoryId"
                    required>
           </div>
           <label for="title" class="col-form-label">Title:</label>
           <div class="input-group mb-3">
             <input type="text" class="form-control" id="title" placeholder="Enter Title."
-                   v-model="modify.title"
+                   v-model="result.title"
                    required>
           </div>
           <label for="description" class="col-form-label">Description:</label>
           <div class="input-group mb-3">
             <input type="text" class="form-control" id="description" placeholder="Enter Description."
-                   v-model="modify.description"
+                   v-model="result.description"
                    required>
           </div>
           <label for="reservePrice" class="col-form-label">Reserve Price:</label>
           <div class="input-group mb-3">
             <input type="number" class="form-control" id="reservePrice" placeholder="Enter Reserve Price."
-                   v-model="modify.reservePrice"
+                   v-model="result.reservePrice"
                    required>
           </div>
           <label for="startingBid" class="col-form-label">Starting Bid:</label>
           <div class="input-group mb-3">
             <input type="number" class="form-control" id="startingBid" placeholder="Enter Starting Bid."
-                   v-model="modify.startingBid"
+                   v-model="result.startingBid"
                    required>
           </div>
           <label for="startDateTime" class="col-form-label">Start Date Time:</label>
           <div class="input-group mb-3 date">
             <input type="date" class="form-control" id="startDateTime" placeholder="Enter Start Date Time."
-                   v-model="modify.startTime"
+                   v-model="result.startTime"
                    required>
           </div>
           <label for="endDateTime" class="col-form-label">End Date Time:</label>
           <div class="input-group mb-3 date">
             <input type="date" class="form-control" id="endDateTime" placeholder="Enter End Date Time."
-                   v-model="modify.endTime"
+                   v-model="result.endTime"
                    required>
           </div>
 
@@ -97,7 +97,7 @@
     props: ['modify'],
     computed: {
       result() {
-        return this.modify
+        return Object.assign({}, this.modify)
       }
     },
     data() {
@@ -118,46 +118,55 @@
               'X-Authorization': window.sessionStorage.token
             },
             data: {
-              "categoryId": parseInt(this.modify.categoryId),
-              "title": this.modify.title,
-              "description": this.modify.description,
-              "startDateTime": (new Date(this.modify.startDateTime)).getTime(),
-              "endDateTime": (new Date(this.modify.endDateTime)).getTime(),
-              "reservePrice": parseInt(this.modify.reservePrice),
-              "startingBid": parseInt(this.modify.startingBid)
+              "categoryId": parseInt(this.result.categoryId),
+              "title": this.result.title,
+              "description": this.result.description,
+              "startDateTime": (new Date(this.result.startDateTime)).getTime(),
+              "endDateTime": (new Date(this.result.endDateTime)).getTime(),
+              "reservePrice": parseInt(this.result.reservePrice),
+              "startingBid": parseInt(this.result.startingBid)
             }
-          }).then(() => {
-            $('#Modify').modal('hide');
+          }).then(()=>{
+            if (this.photoState === 'change' && this.photo) {
+              axios({
+                method: 'post',
+                url: `${CONFIG.URL}/auctions/${this.$route.params.id}/photos`,
+                headers: {
+                  'X-Authorization': window.sessionStorage.token,
+                  'Content-Type': `image/png`
+                },
+                data: this.photo
+              }).then(() => {
+                this.$emit('modifyAuction');
+                $('#Modify').modal('hide');
+              }).catch((err) => {
+                this.message = err
+              });
+            }
+
+            else if (this.photoState === 'delete') {
+              axios({
+                method: 'delete',
+                url: `${CONFIG.URL}/auctions/${this.$route.params.id}/photos`,
+                headers: {
+                  'X-Authorization': window.sessionStorage.token,
+                }
+              }).then(() => {
+                this.$emit('modifyAuction');
+                $('#Modify').modal('hide');
+              }).catch((err) => {
+                this.message = err
+              });
+            }
+
+            else {
+              this.$emit('modifyAuction');
+              $('#Modify').modal('hide');
+            }
           }).catch((err) => {
             this.message = err
           });
-          if (this.photoState === 'change' && this.photo){
-            axios({
-              method: 'post',
-              url: `${CONFIG.URL}/auctions/${this.$route.params.id}/photos`,
-              headers: {
-                'X-Authorization': window.sessionStorage.token,
-                'Content-Type': `image/${this.fileType}`
-              },
-              data: this.photo
-            }).then(() => {
-            }).catch((err) => {
-              this.message = err
-            });
-          }
 
-          else if(this.photoState === 'delete'){
-            axios({
-              method: 'delete',
-              url: `${CONFIG.URL}/auctions/${this.$route.params.id}/photos`,
-              headers: {
-                'X-Authorization': window.sessionStorage.token,
-              }
-            }).then(() => {
-            }).catch((err) => {
-              this.message = err
-            });
-          }
         }
         else {
           this.message = "Start Date Time or End Date Time is illegal"
@@ -165,7 +174,7 @@
       },
 
       validateDateTime() {
-        return !(new Date(this.modify.endDateTime) < new Date(this.modify.startDateTime) || new Date(this.startDateTime) < new Date());
+        return !(new Date(this.result.endDateTime) < new Date(this.result.startDateTime) || new Date(this.startDateTime) < new Date());
       },
 
       onPhotoChanged(event) {

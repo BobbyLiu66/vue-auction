@@ -14,11 +14,11 @@
     <div class="row">
 
       <div class="offset-md-2 col-6" v-if="id">
-        <img v-bind:src="'http://localhost:4941/api/v1/auctions/'+id+'/photos'" alt=""/>
+        <img v-bind:src="imageUrl" alt=""/>
       </div>
 
       <div class="offset-md-2 col-6" v-else>
-        <Loading />
+        <Loading/>
       </div>
 
       <div class="col-3">
@@ -52,7 +52,7 @@
                       :disabled="details.startDateTime <= new Date()">
                 Modify your auction
               </button>
-              <AuctionModify :modify="details" v-on="updateAuctionInfo"/>
+              <AuctionModify v-bind:modify="details" v-on:modifyAuction="updateAuctionInfo"/>
             </td>
           </tr>
           <tr v-if="details.seller.id !== userId">
@@ -89,9 +89,7 @@
         </table>
       </div>
     </div>
-
     <div>
-
     </div>
   </div>
 </template>
@@ -117,7 +115,8 @@
         previousDate: '',
         message: '',
         userBid: '',
-        id: ''
+        id: '',
+        reload: true
       }
     },
     created() {
@@ -125,22 +124,26 @@
     },
 
     computed: {
-      updateAuctionInfo(response) {
-        if (response.startDateTime) {
-          this.details.startTime = this.formatDate(response.startDateTime);
-          this.details.endTime = this.formatDate(response.endDateTime);
-          this.details = response
-        }
-      },
       userId() {
         this.$store.getters.refresh
         return parseInt(window.sessionStorage.userId)
+      },
+      imageUrl() {
+        return `http://localhost:4941/api/v1/auctions/${this.id}/photos/`
       }
     },
 
 
     methods: {
-      getInformation: function () {
+      updateAuctionInfo() {
+        // if (response.startDateTime) {
+        //   this.details.startTime = this.formatDate(response.startDateTime);
+        //   this.details.endTime = this.formatDate(response.endDateTime);
+        //   this.details = response
+        // }
+        window.location.reload()
+      },
+      getInformation() {
         axios({
           method: 'get',
           url: `${CONFIG.URL}/auctions/${this.$route.params.id}`,
@@ -157,18 +160,19 @@
           }, 5 * 1000)
         });
       },
-      formatDate: function (date) {
+
+      formatDate(date) {
         const dateTime = new Date(date);
         return `${dateTime.getFullYear()}-${dateTime.getMonth() + 1 < 10 ? "0" + (dateTime.getMonth() + 1) : dateTime.getMonth() + 1}-${dateTime.getDate() < 10 ? "0" + dateTime.getDate() : dateTime.getDate()}`;
       },
-      bid: function () {
+
+      bid() {
         if (!window.sessionStorage.token) {
           this.message = "Your should login before you make bid"
         }
         else if (this.userBid <= this.details.currentBid) {
           this.message = "Bid amount should be more than current bid amount"
         }
-
         else {
           axios({
             method: 'post',
@@ -183,30 +187,33 @@
             this.message = err
           });
         }
-
         setTimeout(() => {
           this.message = ''
         }, 5 * 1000)
       },
-      checkDate: function (dateTime) {
+
+      checkDate(dateTime) {
         const time = new Date(dateTime);
         const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
         const newDate = `${day} ${months[time.getMonth()]}`;
         return newDate === this.previousDate
       },
-      hourMinutes: function (dateTime) {
+
+      hourMinutes(dateTime) {
         const time = new Date(dateTime);
         const minutes = time.getMinutes() < 10 ? `0${time.getMinutes()}` : time.getMinutes();
         const hours = time.getHours() < 10 ? `0${time.getHours()}` : time.getHours();
         return `${hours}:${minutes}`
       },
-      monthDate: function (dateTime) {
+
+      monthDate(dateTime) {
         const time = new Date(dateTime);
         const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
         this.previousDate = `${day} ${months[time.getMonth()]}`;
         return this.previousDate
       },
-      bidHistory: function () {
+
+      bidHistory() {
         this.bidHistoryStatus = !this.bidHistoryStatus
       }
     }
