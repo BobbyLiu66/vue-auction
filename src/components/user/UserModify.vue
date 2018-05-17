@@ -91,7 +91,7 @@
         }).then(() => {
           this.$emit('modified', this.modifyInfo);
           this.message = "change information success";
-          setInterval(function () {
+          setTimeout(function () {
             $('#Modify').modal('hide')
           }, 1000)
         })

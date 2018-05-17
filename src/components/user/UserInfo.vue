@@ -27,7 +27,7 @@
     <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Modify">
       Change your information
     </button>
-    <ModifyUser :modify="userInfo" v-on="updateUserInfo"></ModifyUser>
+    <ModifyUser :modify="userInfo" v-on:modified="updateUserInfo"></ModifyUser>
   </div>
 </template>
 
@@ -42,9 +42,9 @@
         userInfo: {},
       }
     },
-    computed:{
-      updateUserInfo:function (response) {
-        this.userInfo = response
+    methods: {
+      updateUserInfo(res) {
+        this.userInfo = res
       }
     },
     created() {
