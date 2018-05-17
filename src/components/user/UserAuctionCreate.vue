@@ -119,7 +119,7 @@
               url: `${CONFIG.URL}/auctions/${response.data.id}/photos`,
               headers: {
                 'X-Authorization': window.sessionStorage.token,
-                'Content-Type': `image/${this.fileType}`
+                'Content-Type': `image/png`
               },
               data: this.photo
             }).then(() => {

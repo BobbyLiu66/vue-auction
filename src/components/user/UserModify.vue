@@ -15,32 +15,33 @@
             </div>
             <div class="form-group">
               <label for="username" class="col-form-label">Username:</label>
-              <input type="text" class="form-control" id="username" placeholder="Enter username" v-model="modifyInfo.username"
+              <input type="text" class="form-control" id="username" placeholder="Enter username"
+                     v-model="modifyInfo.username"
 
                      required>
             </div>
             <div class="form-group">
               <label for="givenName">Given name:</label>
               <input type="text" class="form-control" id="givenName" placeholder="Enter given name"
-                     v-model="modify.givenName"
+                     v-model="modifyInfo.givenName"
                      required>
             </div>
             <div class="form-group">
               <label for="familyName">Family name:</label>
               <input type="text" class="form-control" id="familyName" placeholder="Enter family name"
-                     v-model="modify.familyName"
+                     v-model="modifyInfo.familyName"
                      required>
             </div>
             <div class="form-group">
               <label for="email" class="col-form-label">Email address:</label>
               <input type="email" class="form-control" id="email" placeholder="Enter email address"
-                     v-model="modify.email"
+                     v-model="modifyInfo.email"
                      required>
             </div>
             <div class="form-group">
               <label for="password" class="col-form-label">Password:</label>
               <input type="password" class="form-control" id="password" placeholder="Enter password"
-                     v-model="modify.password"
+                     v-model="modifyInfo.password"
                      required>
             </div>
           </form>
@@ -55,24 +56,24 @@
 </template>
 
 <script>
-  //TODO some bugs
   import CONFIG from '../../CONFIG'
+
   export default {
-    props:['modify'],
+    props: ['modify'],
     computed: {
-      modifyInfo: function() {
-        return this.modify;
+      modifyInfo() {
+        return Object.assign({}, this.modify);
       }
     },
     data() {
       return {
         results: '',
-        password:'',
+        password: '',
         message: ''
       }
     },
     methods: {
-      change (event) {
+      change(event) {
         event.preventDefault();
         axios({
           method: 'patch',
@@ -90,7 +91,9 @@
         }).then(() => {
           this.$emit('modified', this.modifyInfo);
           this.message = "change information success";
-          setInterval(function (){$('#Modify').modal('hide')},1000)
+          setInterval(function () {
+            $('#Modify').modal('hide')
+          }, 1000)
         })
           .catch((err) => {
             this.message = err
