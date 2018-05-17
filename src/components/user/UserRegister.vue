@@ -77,7 +77,8 @@
 
     methods: {
 
-      signIn() {
+      signIn(event) {
+        event.preventDefault();
         axios({
           method: 'post',
           url: `${CONFIG.URL}/users`,

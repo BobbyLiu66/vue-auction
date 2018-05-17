@@ -49,10 +49,6 @@
       }
     },
     methods: {
-      // onPhotoChanged(event){
-      //   this.photo = event.target.files[0];
-      //   this.fileType = /[^.]+$/.exec(event.target.files[0].name)[0];
-      // },
 
       getDate() {
         let url = `${CONFIG.URL}/auctions`;

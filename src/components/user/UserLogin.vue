@@ -57,12 +57,13 @@
       }
     },
     methods: {
-      validateEmail: function (email) {
+      validateEmail (email) {
         let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
       },
 
-      login: function () {
+      login (event) {
+        event.preventDefault();
         let data = {username: '', email: '', password: this.password};
         if (this.validateEmail(this.username)) {
           data.email = this.username

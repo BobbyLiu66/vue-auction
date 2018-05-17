@@ -72,7 +72,8 @@
       }
     },
     methods: {
-      change: function () {
+      change (event) {
+        event.preventDefault();
         axios({
           method: 'patch',
           url: `${CONFIG.URL}/users/${this.modifyInfo.id}`,

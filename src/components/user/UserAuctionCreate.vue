@@ -79,7 +79,6 @@
   import CONFIG from '../../CONFIG'
 
   export default {
-
     data() {
       return {
         categoryId: '',

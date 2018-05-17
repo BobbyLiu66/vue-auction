@@ -57,6 +57,28 @@
                    v-model="modify.endTime"
                    required>
           </div>
+
+          <div class="custom-control custom-radio">
+            <input type="radio" id="changePhoto" value="change"
+                   class="custom-control-input" v-model="photoState">
+            <label class="custom-control-label" for="changePhoto">Change Photo</label>
+          </div>
+
+          <label for="photo" class="col-form-label" v-if="photoState === 'change'">Photo:</label>
+          <div class="input-group mb-3" v-if="photoState === 'change'">
+            <div class="custom-file">
+              <input type="file" accept="image/png,image/jpeg" class="form-control" id="photo"
+                     placeholder="Choose photo" @change="onPhotoChanged">
+            </div>
+          </div>
+
+          <div class="custom-control custom-radio">
+            <input type="radio" id="deletePhoto" value="delete"
+                   class="custom-control-input" v-model="photoState">
+            <label class="custom-control-label" for="deletePhoto">Delete Photo</label>
+          </div>
+
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -68,23 +90,88 @@
 </template>
 
 <script>
+  import CONFIG from '../../CONFIG'
+
   export default {
     name: "AuctionModify",
     props: ['modify'],
     computed: {
-      result: function () {
+      result() {
         return this.modify
       }
     },
-    data(){
-      return{
-        message:''
+    data() {
+      return {
+        photo: '',
+        photoState: '',
+        message: ''
       }
     },
-    methods:{
-      change: function () {
+    methods: {
+      change(event) {
+        event.preventDefault();
+        if (this.validateDateTime()) {
+          axios({
+            method: 'patch',
+            url: `${CONFIG.URL}/auctions/${this.$route.params.id}`,
+            headers: {
+              'X-Authorization': window.sessionStorage.token
+            },
+            data: {
+              "categoryId": parseInt(this.modify.categoryId),
+              "title": this.modify.title,
+              "description": this.modify.description,
+              "startDateTime": (new Date(this.modify.startDateTime)).getTime(),
+              "endDateTime": (new Date(this.modify.endDateTime)).getTime(),
+              "reservePrice": parseInt(this.modify.reservePrice),
+              "startingBid": parseInt(this.modify.startingBid)
+            }
+          }).then(() => {
+            $('#Modify').modal('hide');
+          }).catch((err) => {
+            this.message = err
+          });
+          if (this.photoState === 'change' && this.photo){
+            axios({
+              method: 'post',
+              url: `${CONFIG.URL}/auctions/${this.$route.params.id}/photos`,
+              headers: {
+                'X-Authorization': window.sessionStorage.token,
+                'Content-Type': `image/${this.fileType}`
+              },
+              data: this.photo
+            }).then(() => {
+            }).catch((err) => {
+              this.message = err
+            });
+          }
 
-      }
+          else if(this.photoState === 'delete'){
+            axios({
+              method: 'delete',
+              url: `${CONFIG.URL}/auctions/${this.$route.params.id}/photos`,
+              headers: {
+                'X-Authorization': window.sessionStorage.token,
+              }
+            }).then(() => {
+            }).catch((err) => {
+              this.message = err
+            });
+          }
+        }
+        else {
+          this.message = "Start Date Time or End Date Time is illegal"
+        }
+      },
+
+      validateDateTime() {
+        return !(new Date(this.modify.endDateTime) < new Date(this.modify.startDateTime) || new Date(this.startDateTime) < new Date());
+      },
+
+      onPhotoChanged(event) {
+        this.photo = event.target.files[0];
+        this.fileType = /[^.]+$/.exec(event.target.files[0].name)[0];
+      },
     }
   }
 </script>
