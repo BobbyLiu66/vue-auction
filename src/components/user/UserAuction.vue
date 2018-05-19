@@ -51,15 +51,15 @@
     methods: {
 
       getDate() {
-        let url = `${CONFIG.URL}/auctions`;
+        let url = `${CONFIG.URL}`;
         if (this.$route.params.type === 'seller') {
-          url += `?seller=${this.$route.params.id}`
+          url += `/auctions?seller=${this.$route.params.id}`
         }
         if (this.$route.params.type === 'winner') {
-          url += `?winner=${this.$route.params.id}`
+          url += `/my_won_auctions`
         }
         if (this.$route.params.type === 'bidder') {
-          url += `?bidder=${this.$route.params.id}`
+          url += `/auctions?bidder=${this.$route.params.id}`
         }
         axios({
           method: 'get',
