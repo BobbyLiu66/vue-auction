@@ -18,26 +18,16 @@
     <form v-if="display">
       <h5>Shop based on your choose</h5>
       <div class="form-group">
-        <label for="startIndex" class="col-form-label">Start Index:</label>
-        <input type="number" class="form-control form-control-sm" id="startIndex"
-               placeholder="Enter number of items to skip."
-               v-model="startIndex">
-      </div>
-      <div class="form-group">
-        <label for="count" class="col-form-label">Count:</label>
-        <input type="number" class="form-control form-control-sm" id="count" placeholder="Enter number of items."
-               v-model="count">
-      </div>
-      <div class="form-group">
         <label for="auctionTitle" class="col-form-label">Auction Title:</label>
         <input type="text" class="form-control form-control-sm" id="auctionTitle" placeholder="Enter auction titles."
                v-model="q">
       </div>
       <div class="form-group">
         <label for="categoryId" class="col-form-label">Category:</label>
-        <input type="number" class="form-control form-control-sm" id="categoryId"
-               placeholder="Enter ID for the category."
-               v-model="categoryId">
+        <select class="custom-select" id="categoryId" v-model="categoryId">
+          <option v-for="category in categories" v-bind:value="category.categoryId" >{{category.categoryTitle}}</option>
+        </select>
+
       </div>
       <div class="form-group">
         <label for="seller" class="col-form-label">Seller:</label>
@@ -90,8 +80,6 @@
       return {
         radioCategory: '',
         display: false,
-        startIndex: '',
-        count: '',
         q: '',
         categoryId: '',
         seller: '',
@@ -108,21 +96,20 @@
       }).then((response) => {
         this.categories = response.data
       }).catch((err) => {
-        //TODO
+        this.message = err
       });
     },
     methods: {
       search() {
         axios({
           method: 'get',
-          url: `${CONFIG.URL}/auctions?status=${this.status}&startIndex=${this.startIndex}&count=${this.count}&q=${this.q}&category-id=${this.categoryId}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}`,
+          url: `${CONFIG.URL}/auctions?status=${this.status}&q=${this.q}&category-id=${this.categoryId}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}`,
           headers: {
             'X-Authorization': window.sessionStorage.token
           },
         }).then((response) => {
           this.$emit('search', response.data);
         }).catch((err) => {
-          //TODO
           this.$emit('search', err);
         });
       },

@@ -21,7 +21,12 @@
         </div>
       </div>
     </div>
-    <div v-else-if="auctions.length === 0 || auctions === undefined">
+    <div v-else-if="typeof auctions === 'string'">
+      <div class="alert alert-info alert-position" role="alert">
+        {{auctions}}
+      </div>
+    </div>
+    <div v-else>
       <div class="lds-css ng-scope">
         <div class="lds-spinner">
           <div></div>
@@ -37,11 +42,6 @@
           <div></div>
           <div></div>
         </div>
-      </div>
-    </div>
-    <div v-else>
-      <div class="alert alert-info alert-position" role="alert">
-        {{auctions}}
       </div>
     </div>
   </div>
