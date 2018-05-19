@@ -64,6 +64,9 @@
         axios({
           method: 'get',
           url: url,
+          headers: {
+            'X-Authorization': window.sessionStorage.token
+          }
         }).then((response) => {
           if (response.data.length === 0) {
             this.message = 'No result';

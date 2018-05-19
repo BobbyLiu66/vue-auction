@@ -16,12 +16,12 @@ export default new Router({
       component: Home
     },
     {
-      path:'/user/auction/:type',
+      path:'/user/auction/:type/:id',
       name:'UserAuction',
       component:UserAuction
     },
     {
-      path: '/user/info',
+      path: '/user/info/:id',
       name: 'UserInfo',
       component: UserInfo
     },

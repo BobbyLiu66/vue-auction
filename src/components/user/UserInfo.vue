@@ -52,11 +52,11 @@
         method: 'get',
         url: `${CONFIG.URL}/users/${this.$route.params.id}`,
         headers: {
-          'X-Authorization': this.$route.params.token
+          'X-Authorization': window.sessionStorage.token
         }
       }).then((response) => {
         response.data.id = this.$route.params.id;
-        response.data.token = this.$route.params.token;
+        response.data.token = window.sessionStorage.token;
         this.userInfo = response.data
       }).catch((err) => {
         this.message = err
