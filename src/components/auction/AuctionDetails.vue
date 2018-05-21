@@ -15,82 +15,87 @@
 
       <div class="offset-md-2 col-6" v-if="id">
         <img v-bind:src="imageUrl" alt=""/>
+      <p v-if="new Date() < details.startDateTime">Start from: <span v-bind:class="timeStyle">{{monthDate(details.startDateTime)}}</span></p>
+      <p v-else-if="new Date() < details.endDateTime">End at: <span v-bind:class="timeStyle">{{monthDate(details.endDateTime)}}</span></p>
+        <p v-else class="text-muted">This auction has been closed</p>
       </div>
 
-      <div class="offset-md-2 col-6" v-else>
-        <Loading/>
-      </div>
-
-      <div class="col-3">
-        <table class="table">
-          <tr>
-            <td>Reserve Price:</td>
-            <td>NZD{{details.reservePrice}}</td>
-          </tr>
-          <tr>
-            <td>Starting Price:</td>
-            <td>NZD{{details.startingBid}}</td>
-          </tr>
-          <tr>
-            <td>Current Price:</td>
-            <td>NZD{{details.currentBid}}</td>
-          </tr>
-          <tr v-if="details.seller.id !== userId">
-            <td>your bid amount:</td>
-            <td><input type="number" class="form-control form-control-sm" placeholder="Enter your bid amount."
-                       v-model="userBid"/>
-            </td>
-          </tr>
-          <tr v-if="details.seller.id !== userId">
-            <td colspan="2" class="text-center">
-              <button type="button" class="btn btn-primary" @click="bid">Bid Now</button>
-            </td>
-          </tr>
-          <tr v-if="details.seller.id === userId">
-            <td colspan="2" class="text-center">
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modify"
-                      :disabled="details.startDateTime <= new Date()">
-                Modify your auction
-              </button>
-              <AuctionModify v-bind:modify="details" v-on:modifyAuction="updateAuctionInfo"/>
-            </td>
-          </tr>
-          <tr v-if="details.seller.id !== userId">
-            <td colspan="2" class="text-center">
-              <p class="text-muted">Seller Detail:
-                <router-link :to="{name:'UserInfo',params:{id:details.seller.id}}">{{details.seller.username}}
-                </router-link>
-              </p>
-            </td>
-          </tr>
-        </table>
-        <div class="row"></div>
-        <table class="table">
-          <thead>
-          <tr>
-            <th class="text-center" colspan="3"><a href="#" @click="bidHistory">Bid History</a></th>
-          </tr>
-          </thead>
-          <tbody v-for="bids in bidList" v-bind:class="{'history':bidHistoryStatus}">
-
-          <tr v-if="!checkDate(bids.datetime)">
-            <td colspan="3">{{monthDate(bids.datetime)}}</td>
-          </tr>
-
-          <tr>
-            <td>NZD{{bids.amount}}</td>
-            <td>
-              <router-link :to="{name:'UserInfo',params:{id:bids.buyerId}}"><p class="text-truncate">
-                {{bids.buyerUsername}}</p></router-link>
-            </td>
-            <td>{{hourMinutes(bids.datetime)}}</td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="offset-md-2 col-6" v-else>
+      <Loading/>
     </div>
-    <div>
+
+    <div class="col-3">
+      <table class="table">
+        <tr>
+          <td>Reserve Price:</td>
+          <td>NZD{{details.reservePrice}}</td>
+        </tr>
+        <tr>
+          <td>Starting Price:</td>
+          <td>NZD{{details.startingBid}}</td>
+        </tr>
+        <tr>
+          <td>Current Price:</td>
+          <td>NZD{{details.currentBid}}</td>
+        </tr>
+        <tr v-if="details.seller.id !== userId">
+          <td>your bid amount:</td>
+          <td><input type="number" class="form-control form-control-sm" placeholder="Enter your bid amount."
+                     v-model="userBid"/>
+          </td>
+        </tr>
+        <tr v-if="details.seller.id !== userId">
+          <td colspan="2" class="text-center">
+            <button type="button" class="btn btn-primary" @click="bid"
+                    :disabled="new Date() >= details.endDateTime">Bid Now
+            </button>
+          </td>
+        </tr>
+        <tr v-if="details.seller.id === userId">
+          <td colspan="2" class="text-center">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modify"
+                    :disabled="details.startDateTime <= new Date()">
+              Modify your auction
+            </button>
+            <AuctionModify v-bind:modify="details" v-on:modifyAuction="updateAuctionInfo"/>
+          </td>
+        </tr>
+        <tr v-if="details.seller.id !== userId">
+          <td colspan="2" class="text-center">
+            <p class="text-muted">Seller Detail:
+              <router-link :to="{name:'UserInfo',params:{id:details.seller.id}}">{{details.seller.username}}
+              </router-link>
+            </p>
+          </td>
+        </tr>
+      </table>
+      <div class="row"></div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th class="text-center" colspan="3"><a href="#" @click="bidHistory">Bid History</a></th>
+        </tr>
+        </thead>
+        <tbody v-for="bids in bidList" v-bind:class="{'history':bidHistoryStatus}">
+
+        <tr v-if="!checkDate(bids.datetime)">
+          <td colspan="3">{{monthDate(bids.datetime)}}</td>
+        </tr>
+
+        <tr>
+          <td>NZD{{bids.amount}}</td>
+          <td>
+            <router-link :to="{name:'UserInfo',params:{id:bids.buyerId}}"><p class="text-truncate">
+              {{bids.buyerUsername}}</p></router-link>
+          </td>
+          <td>{{hourMinutes(bids.datetime)}}</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
+  <div>
+  </div>
   </div>
 </template>
 
@@ -130,17 +135,31 @@
       },
       imageUrl() {
         return `http://localhost:4941/api/v1/auctions/${this.id}/photos/`
+      },
+      timeStyle() {
+        const now = new Date();
+        let style = {'text-success': true};
+        if(this.details.startDateTime > now){
+          //upcoming
+          style = {
+            'text-info': true
+          }
+        }
+        else if(this.details.endDateTime < now){
+          //end
+          if(this.details.endDateTime - now < 8.64e+7){
+            style = {
+              'text-danger': true
+            }
+          }
+        }
+        return style
       }
     },
 
 
     methods: {
       updateAuctionInfo() {
-        // if (response.startDateTime) {
-        //   this.details.startTime = this.formatDate(response.startDateTime);
-        //   this.details.endTime = this.formatDate(response.endDateTime);
-        //   this.details = response
-        // }
         window.location.reload()
       },
       getInformation() {
@@ -173,6 +192,10 @@
         else if (this.userBid <= this.details.currentBid) {
           this.message = "Bid amount should be more than current bid amount"
         }
+        else if (new Date() >= new Date(this.details.endDateTime)) {
+          this.message = "Bid amount should be more than current bid amount"
+        }
+
         else {
           axios({
             method: 'post',
@@ -209,7 +232,7 @@
       monthDate(dateTime) {
         const time = new Date(dateTime);
         const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
-        this.previousDate = `${day} ${months[time.getMonth()]}`;
+        this.previousDate = `${day} ${months[time.getMonth()]} ${time.getFullYear()}`;
         return this.previousDate
       },
 
