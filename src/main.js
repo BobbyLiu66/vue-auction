@@ -8,16 +8,23 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    needRefresh: false
+    needRefresh: false,
+    init: true
   },
   mutations: {
     refresh(state) {
       state.needRefresh = !state.needRefresh
+    },
+    init(state) {
+      state.init = !state.init
     }
   },
   getters: {
     refresh: (state) => {
       return state.needRefresh
+    },
+    init: (state)=>{
+      return state.init
     }
   }
 });

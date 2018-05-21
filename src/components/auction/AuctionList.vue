@@ -21,12 +21,7 @@
         </div>
       </div>
     </div>
-    <div v-else-if="typeof auctions === 'string'">
-      <div class="alert alert-info alert-position" role="alert">
-        {{auctions}}
-      </div>
-    </div>
-    <div v-else>
+    <div v-else-if="auctions === 'init'">
       <div class="lds-css ng-scope">
         <div class="lds-spinner">
           <div></div>
@@ -44,6 +39,11 @@
         </div>
       </div>
     </div>
+    <div v-else-if="typeof auctions === 'string'">
+      <div class="alert alert-info alert-position" role="alert">
+        {{auctions}}
+      </div>
+    </div>
   </div>
 
 </template>
@@ -57,6 +57,7 @@
     components: {Loading},
     computed: {
       auctions() {
+        const init = this.$store.getters.init;
         let result = this.auctionDetail;
         if (this.categorySearch) {
           result = [];
@@ -67,8 +68,12 @@
             result = "No available items found under such category"
           }
         }
-        if (this.auctionDetail.length === 0) {
+        if (result.length === 0 && !init) {
           result = "No available items found"
+        }
+        else if(init){
+          result = 'init';
+          this.$store.commit('init')
         }
         return result
       },
