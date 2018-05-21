@@ -23,13 +23,6 @@
                v-model="q">
       </div>
       <div class="form-group">
-        <label for="categoryId" class="col-form-label">Category:</label>
-        <select class="custom-select" id="categoryId" v-model="categoryId">
-          <option v-for="category in categories" v-bind:value="category.categoryId" >{{category.categoryTitle}}</option>
-        </select>
-
-      </div>
-      <div class="form-group">
         <label for="seller" class="col-form-label">Seller:</label>
         <input type="number" class="form-control form-control-sm" id="seller" placeholder="Enter seller."
                v-model="seller">
@@ -81,7 +74,6 @@
         radioCategory: '',
         display: false,
         q: '',
-        categoryId: '',
         seller: '',
         bidder: '',
         winner: '',
@@ -103,7 +95,7 @@
       search() {
         axios({
           method: 'get',
-          url: `${CONFIG.URL}/auctions?status=${this.status}&q=${this.q}&category-id=${this.categoryId}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}`,
+          url: `${CONFIG.URL}/auctions?status=${this.status}&q=${this.q}&seller=${this.seller}&winner=${this.winner}&bidder=${this.bidder}`,
           headers: {
             'X-Authorization': window.sessionStorage.token
           },
