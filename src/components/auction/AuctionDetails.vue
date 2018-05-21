@@ -218,7 +218,7 @@
       checkDate(dateTime) {
         const time = new Date(dateTime);
         const day = time.getDate() < 10 ? `0${time.getDate()}` : time.getDate();
-        const newDate = `${day} ${months[time.getMonth()]}`;
+        const newDate = `${day} ${months[time.getMonth()]} ${time.getFullYear()}`;
         return newDate === this.previousDate
       },
 
