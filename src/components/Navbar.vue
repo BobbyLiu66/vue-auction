@@ -1,12 +1,11 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-    <router-link class="navbar-brand" to="/">Home</router-link>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+      <router-link class="navbar-brand" to="/">Home</router-link>
+    </div>
 
-    <div class="collapse navbar-collapse mt-2 mt-md-0">
+
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
       <ul class="navbar-nav mr-auto" v-if="this.username">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -34,23 +33,23 @@
           </div>
         </li>
       </ul>
-      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#Create" v-if="this.username">
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#Create"
+              v-if="this.username">
         Create Auction
       </button>
-      <CreateAuction />
+      <CreateAuction/>
+        <form class="form-inline mt-2 mt-md-0" v-if="!this.username">
+          <button type="button" class="btn btn-outline-success " data-toggle="modal" data-target="#Login">
+            Login
+          </button>
+          <Login v-on:loginMethod="userInfo"/>
 
-      <form class="form-inline mt-2 mt-md-0" v-if="!this.username">
-        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Login">
-          Login
-        </button>
-        <Login v-on:loginMethod="userInfo"/>
-
-        <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#SignIn">
-          Register
-        </button>
-        <SignIn v-on:signIn="userInfo"/>
-      </form>
-    </div>
+          <button type="button" class="btn btn-outline-success " data-toggle="modal" data-target="#SignIn">
+            Register
+          </button>
+          <SignIn v-on:signIn="userInfo"/>
+        </form>
+      </div>
   </nav>
 
 
@@ -101,7 +100,7 @@
       },
 
 
-      userInfo (response) {
+      userInfo(response) {
         this.username = window.sessionStorage.username = response.username;
         this.token = window.sessionStorage.token = response.token;
         this.id = window.sessionStorage.userId = response.id;
