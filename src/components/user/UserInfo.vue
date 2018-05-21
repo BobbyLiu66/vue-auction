@@ -59,7 +59,7 @@
         response.data.token = window.sessionStorage.token;
         this.userInfo = response.data
       }).catch((err) => {
-        this.message = err
+        this.message = 'something wrong'
       });
     },
     components: {

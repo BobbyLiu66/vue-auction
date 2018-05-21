@@ -154,7 +154,7 @@
           this.details.endTime = this.formatDate(this.details.endDateTime);
           this.bidList = response.data.bids;
         }).catch((err) => {
-          this.message = err;
+          this.message = 'something wrong';
           setTimeout(() => {
             this.message = ''
           }, 5 * 1000)
@@ -184,7 +184,7 @@
             this.message = 'bid success';
             this.getInformation()
           }).catch((err) => {
-            this.message = err
+            this.message = 'something wrong'
           });
         }
         setTimeout(() => {

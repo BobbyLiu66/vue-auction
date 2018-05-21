@@ -61,7 +61,7 @@
       }).then((response) => {
         this.auctionDetail = response.data
       }).catch((err) => {
-        this.message = err
+        this.message = 'something wrong'
       });
     },
 

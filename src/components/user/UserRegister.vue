@@ -101,10 +101,10 @@
             this.$emit('signIn', {token: response.data.token, username: this.username, id: response.data.id});
             $('#SignIn').modal('hide')
           }).catch((err) => {
-            this.message = err
+            this.message = 'something wrong'
           })
         }).catch((err) => {
-          this.message = err
+          this.message = 'something wrong'
         });
       }
     },

@@ -127,10 +127,10 @@
               $('#Create').modal('hide');
               this.getDate()
             }).catch((err) => {
-              this.message = err
+              this.message = 'something wrong'
             });
           }).catch((err) => {
-            this.message = err
+            this.message = 'something wrong'
           });
         }
         else {

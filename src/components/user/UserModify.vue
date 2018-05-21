@@ -96,7 +96,7 @@
           }, 1000)
         })
           .catch((err) => {
-            this.message = err
+            this.message = 'something wrong'
           });
       }
     },
