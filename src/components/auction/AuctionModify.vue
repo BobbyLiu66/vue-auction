@@ -140,7 +140,7 @@
                 this.$emit('modifyAuction');
                 $('#Modify').modal('hide');
               }).catch((err) => {
-                this.message = 'something wrong'
+                this.message = 'Modify photo wrong'
               });
             }
 
@@ -155,7 +155,7 @@
                 this.$emit('modifyAuction');
                 $('#Modify').modal('hide');
               }).catch((err) => {
-                this.message = 'something wrong'
+                this.message = 'Delete photo wrong'
               });
             }
 
@@ -164,7 +164,7 @@
               $('#Modify').modal('hide');
             }
           }).catch((err) => {
-            this.message = 'something wrong'
+            this.message = 'Modify auction wrong'
           });
 
         }

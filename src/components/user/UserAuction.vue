@@ -34,10 +34,10 @@
 
     computed: {
       auctionDetail: {
-        get: function () {
+        get () {
           return this.auctions
         },
-        set: function (response) {
+        set (response) {
           this.auctions = response
         }
       }
@@ -91,55 +91,9 @@
             this.auctionDetail = response.data
           }
         }).catch((err) => {
-          this.message = 'something wrong'
+          this.message = 'Get auction wrong'
         });
       },
-
-      //TODO move to another position
-      // createAuction() {
-      //   if(this.validateDateTime()){
-      //     axios({
-      //       method: 'post',
-      //       url: `${CONFIG.URL}/auctions`,
-      //       headers: {
-      //         'X-Authorization': window.sessionStorage.token
-      //       },
-      //       data:{
-      //         "categoryId": parseInt(this.categoryId),
-      //         "title": this.title,
-      //         "description": this.description,
-      //         "startDateTime": (new Date(this.startDateTime)).getTime(),
-      //         "endDateTime": (new Date(this.endDateTime)).getTime(),
-      //         "reservePrice": parseInt(this.reservePrice),
-      //         "startingBid": parseInt(this.startingBid)
-      //       }
-      //     }).then((response) => {
-      //       axios({
-      //         method:'post',
-      //         url:`${CONFIG.URL}/auctions/${response.data.id}/photos`,
-      //         headers: {
-      //           'X-Authorization': window.sessionStorage.token,
-      //           'Content-Type': `image/${this.fileType}`
-      //         },
-      //         data:this.photo
-      //       }).then(()=>{
-      //         this.message = "create auction success";
-      //         $('#Create').modal('hide');
-      //         this.getDate()
-      //       }).catch((err)=>{this.message = err});
-      //     }).catch((err) => {
-      //       this.message = err
-      //     });
-      //   }
-      //   else {
-      //     this.createMessage = "Start Date Time or End Date Time is illegal"
-      //   }
-      // },
-      //
-      // validateDateTime() {
-      //   return !(new Date(this.endDateTime) < new Date(this.startDateTime) || new Date(this.startDateTime) < new Date());
-      // }
-      //
     },
     created() {
       this.getDate()

@@ -25,23 +25,23 @@
     data() {
       return {
         auctions: [],
-        categoryId:''
+        categoryId: ''
       }
     },
     computed: {
       auctionDetail: {
-        get: function () {
+        get() {
           return this.auctions
         },
-        set: function (response) {
+        set(response) {
           this.auctions = response
         }
       },
-      categorySearch:{
-        get: function () {
+      categorySearch: {
+        get() {
           return this.categoryId
         },
-        set: function (response) {
+        set(response) {
           this.categoryId = response
         }
       }
@@ -61,7 +61,7 @@
       }).then((response) => {
         this.auctionDetail = response.data
       }).catch((err) => {
-        this.message = 'something wrong'
+        this.message = 'No auction'
       });
     },
 

@@ -173,7 +173,7 @@
           this.details.endTime = this.formatDate(this.details.endDateTime);
           this.bidList = response.data.bids;
         }).catch((err) => {
-          this.message = 'something wrong';
+          this.message = 'Get details wrong';
           setTimeout(() => {
             this.message = ''
           }, 5 * 1000)
@@ -204,10 +204,10 @@
               'X-Authorization': window.sessionStorage.token
             }
           }).then(() => {
-            this.message = 'bid success';
+            this.message = 'Bid success';
             this.getInformation()
           }).catch((err) => {
-            this.message = 'something wrong'
+            this.message = 'Bid fail'
           });
         }
         setTimeout(() => {
@@ -252,9 +252,5 @@
 
   table {
     empty-cells: show;
-  }
-
-  .history {
-    display: none;
   }
 </style>

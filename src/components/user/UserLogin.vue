@@ -84,7 +84,7 @@
             this.$emit('loginMethod', {token: response.data.token, username: this.username, id: response.data.id});
             $('#Login').modal('hide');
           }).catch((err) => {
-            this.message = 'something wrong';
+            this.message = 'Login fail, try again later';
             setInterval(()=>{this.message = ''},5 * 1000)
           });
         }

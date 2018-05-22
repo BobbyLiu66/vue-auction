@@ -127,10 +127,10 @@
               $('#Create').modal('hide');
               this.getDate()
             }).catch((err) => {
-              this.message = 'something wrong'
+              this.message = 'Add photo wrong'
             });
           }).catch((err) => {
-            this.message = 'something wrong'
+            this.message = 'Create auction wrong'
           });
         }
         else {
@@ -144,8 +144,8 @@
 
       onPhotoChanged(event) {
         this.photo = event.target.files[0];
-        this.fileType = /[^.]+$/.exec(event.target.files[0].name)[0];
-      },
+        // this.fileType = /[^.]+$/.exec(event.target.files[0].name)[0];
+      }
     }
   }
 </script>

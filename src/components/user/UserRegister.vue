@@ -101,10 +101,9 @@
             this.$emit('signIn', {token: response.data.token, username: this.username, id: response.data.id});
             $('#SignIn').modal('hide')
           }).catch((err) => {
-            this.message = 'something wrong'
           })
         }).catch((err) => {
-          this.message = 'something wrong'
+          this.message = 'Register fail'
         });
       }
     },
@@ -113,10 +112,5 @@
 </script>
 
 <style scoped>
-  .login-page {
-    width: 100%;
-    max-width: 40%;
-    padding: 15px;
-    margin: 0 auto;
-  }
+
 </style>

@@ -88,7 +88,7 @@
       }).then((response) => {
         this.categories = response.data
       }).catch((err) => {
-        this.message = 'something wrong'
+        this.message = 'Get categories wrong'
       });
     },
     methods: {

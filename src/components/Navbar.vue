@@ -95,7 +95,7 @@
           this.id = window.sessionStorage.userId = '';
           this.$store.commit('refresh')
         }).catch((err) => {
-          this.message = 'something wrong'
+          this.message = 'Logout fail'
         });
       },
 
