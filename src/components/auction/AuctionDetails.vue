@@ -17,7 +17,7 @@
         <img v-bind:src="imageUrl" alt=""/>
       <p v-if="new Date() < details.startDateTime">Start from: <span v-bind:class="timeStyle">{{monthDate(details.startDateTime)}}</span></p>
       <p v-else-if="new Date() < details.endDateTime">End at: <span v-bind:class="timeStyle">{{monthDate(details.endDateTime)}}</span></p>
-        <p v-else class="text-muted">This auction has been closed</p>
+        <p v-else class="text-muted">This auction has already expired</p>
       </div>
 
     <div class="offset-md-2 col-6" v-else>

@@ -14,17 +14,17 @@
         <th scope="row">given name:</th>
         <td>{{this.userInfo.givenName}}</td>
       </tr>
-      <tr>
+      <tr v-if="this.userInfo.email">
         <th scope="row">email address:</th>
         <td>{{this.userInfo.email}}</td>
       </tr>
-      <tr>
+      <tr v-if="this.userInfo.email">
         <th scope="row">account balance:</th>
-        <td>NZD{{this.userInfo.accountBalance}}</td>
+        <td>NZD{{this.userInfo.accountBalance || 0}}</td>
       </tr>
       </tbody>
     </table>
-    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Modify">
+    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#Modify" v-if="this.userInfo.email">
       Change your information
     </button>
     <ModifyUser :modify="userInfo" v-on:modified="updateUserInfo"></ModifyUser>
@@ -42,25 +42,33 @@
         userInfo: {},
       }
     },
+    watch: {
+      '$route'() {
+        this.getData()
+      }
+    },
     methods: {
       updateUserInfo(res) {
         this.userInfo = res
+      },
+      getData(){
+        axios({
+          method: 'get',
+          url: `${CONFIG.URL}/users/${this.$route.params.id}`,
+          headers: {
+            'X-Authorization': window.sessionStorage.token
+          }
+        }).then((response) => {
+          response.data.id = this.$route.params.id;
+          response.data.token = window.sessionStorage.token;
+          this.userInfo = response.data
+        }).catch((err) => {
+          this.message = 'Get user information wrong'
+        });
       }
     },
     created() {
-      axios({
-        method: 'get',
-        url: `${CONFIG.URL}/users/${this.$route.params.id}`,
-        headers: {
-          'X-Authorization': window.sessionStorage.token
-        }
-      }).then((response) => {
-        response.data.id = this.$route.params.id;
-        response.data.token = window.sessionStorage.token;
-        this.userInfo = response.data
-      }).catch((err) => {
-        this.message = 'Get user information wrong'
-      });
+      this.getData()
     },
     components: {
       ModifyUser

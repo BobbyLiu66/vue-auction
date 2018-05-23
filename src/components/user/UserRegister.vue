@@ -76,35 +76,42 @@
     },
 
     methods: {
-
+      validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      },
       signIn(event) {
         event.preventDefault();
-        axios({
-          method: 'post',
-          url: `${CONFIG.URL}/users`,
-          data: {
-            username: this.username,
-            givenName: this.givenName,
-            familyName: this.familyName,
-            email: this.email,
-            password: this.password,
-          }
-        }).then(() => {
+        if (!this.validateEmail(this.email)) {
+          this.message = 'Please use a correct email address'
+        } else {
           axios({
             method: 'post',
-            url: `${CONFIG.URL}/users/login`,
+            url: `${CONFIG.URL}/users`,
             data: {
               username: this.username,
-              password: this.password
+              givenName: this.givenName,
+              familyName: this.familyName,
+              email: this.email,
+              password: this.password,
             }
-          }).then((response) => {
-            this.$emit('signIn', {token: response.data.token, username: this.username, id: response.data.id});
-            $('#SignIn').modal('hide')
+          }).then(() => {
+            axios({
+              method: 'post',
+              url: `${CONFIG.URL}/users/login`,
+              data: {
+                username: this.username,
+                password: this.password
+              }
+            }).then((response) => {
+              this.$emit('signIn', {token: response.data.token, username: this.username, id: response.data.id});
+              $('#SignIn').modal('hide')
+            }).catch((err) => {
+            })
           }).catch((err) => {
-          })
-        }).catch((err) => {
-          this.message = 'Register fail'
-        });
+            this.message = 'Register fail'
+          });
+        }
       }
     },
     name: "SignIn"

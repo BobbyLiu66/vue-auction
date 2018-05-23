@@ -1,6 +1,6 @@
 <template>
   <div class="col-7 offset-md-1">
-    <div v-if="auctions.length > 0 && Array.isArray(auctions)">
+    <div v-if="Array.isArray(auctions)">
       <div v-for="auction in auctions">
         <div class="row"><h5 v-if="auction.additional" class="auction">{{auction.additional}}</h5></div>
         <div class="row border auction">
@@ -21,7 +21,12 @@
         </div>
       </div>
     </div>
-    <div v-else-if="auctions === 'init'">
+    <div v-else-if="typeof auctions === 'string'">
+      <div class="alert alert-info alert-position" role="alert">
+        {{auctions}}
+      </div>
+    </div>
+    <div v-else-if="auctions.length === 0">
       <div class="lds-css ng-scope">
         <div class="lds-spinner">
           <div></div>
@@ -39,11 +44,6 @@
         </div>
       </div>
     </div>
-    <div v-else-if="typeof auctions === 'string'">
-      <div class="alert alert-info alert-position" role="alert">
-        {{auctions}}
-      </div>
-    </div>
   </div>
 
 </template>
@@ -57,23 +57,20 @@
     components: {Loading},
     computed: {
       auctions() {
-        const init = this.$store.getters.init;
         let result = this.auctionDetail;
         if (this.categorySearch) {
           result = [];
-          this.auctionDetail.map((detail) => {
-            detail.categoryId === this.categorySearch && result.push(detail)
-          });
-          if (result.length === 0) {
-            result = "No available items found under such category"
+          if(typeof this.auctionDetail === 'object'){
+            this.auctionDetail.map((detail) => {
+              detail.categoryId === this.categorySearch && result.push(detail)
+            });
+            if (result.length === 0) {
+              result = "No available items found under such category"
+            }
           }
         }
-        if (result.length === 0 && !init) {
-          result = "No available items found"
-        }
-        else if(init){
-          result = 'init';
-          this.$store.commit('init')
+        else if(this.auctionDetail.length === 0){
+          result = "No available items founded"
         }
         return result
       },

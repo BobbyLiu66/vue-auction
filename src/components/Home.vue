@@ -59,7 +59,10 @@
         method: 'get',
         url: `${CONFIG.URL}/auctions`,
       }).then((response) => {
-        this.auctionDetail = response.data
+        this.auctionDetail = response.data;
+        if (response.data.length === 0){
+          this.auctionDetail = "No available items found"
+        }
       }).catch((err) => {
         this.message = 'No auction'
       });
