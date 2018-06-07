@@ -1,6 +1,7 @@
 # Auction
 
-Vue + Vuex + Vue Router Assignment for my course
+Vue + Vuex + Vue Router 
+Assignment for my course
 
 ## Features
 
